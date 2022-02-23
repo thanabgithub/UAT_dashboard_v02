@@ -1,12 +1,33 @@
 import React, { Component } from "react";
-import "./styles/index.css";
+import "./styles/default.css";
+import Welcome from "./pages/setting/Setting";
+import styled, { css } from "styled-components";
 
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
+const MyContainer = styled.div`
+  color: green;
+  ${(props) =>
+    props.primary &&
+    css`
+      color: palevioletred;
+    `}
+`;
+
+const NewContainer = styled(MyContainer)`
+  color: tomato;
+  font-size: 100px;
+`;
+
 class App extends Component {
   render() {
-    return <Welcome />;
+    return (
+      <div>
+        {" "}
+        <MyContainer primary>
+          <Welcome name="NowHit" />
+        </MyContainer>
+        <NewContainer>test</NewContainer>
+      </div>
+    );
   }
 }
 
