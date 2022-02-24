@@ -1,32 +1,21 @@
 import React, { Component } from "react";
-import "./styles/default.css";
+
+import "./styles/Fonts.js";
 import Welcome from "./pages/setting/Setting";
-import styled, { css } from "styled-components";
 
-const MyContainer = styled.div`
-  color: green;
-  ${(props) =>
-    props.primary &&
-    css`
-      color: palevioletred;
-    `}
-`;
-
-const NewContainer = styled(MyContainer)`
-  color: tomato;
-  font-size: 100px;
-`;
+import AppLayout from "./components/containers/AppLayout";
+import AppBar from "./components/elements/appBar/AppBar";
+import { AppProvider } from "./contexts/AppContext";
 
 class App extends Component {
   render() {
     return (
-      <div>
-        {" "}
-        <MyContainer primary>
+      <AppLayout>
+        <AppProvider>
+          <AppBar />
           <Welcome name="NowHit" />
-        </MyContainer>
-        <NewContainer>test</NewContainer>
-      </div>
+        </AppProvider>
+      </AppLayout>
     );
   }
 }
