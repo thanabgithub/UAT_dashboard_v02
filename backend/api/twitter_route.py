@@ -1,7 +1,7 @@
 
-from service.twitter_service import get_tw_count_service
+from service.twitter_service import *
 import pandas as pd
-from flask import Blueprint, request
+from flask import Blueprint
 twitter_route = Blueprint('twitter_route', __name__)
 
 
@@ -16,28 +16,22 @@ def index():
     https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design
 """
 
-@twitter_route.route("/twitter/keywords/", methods=['GET'])
-def get_tw_count():
-    keyword = request.args.get("query")
 
-    print(keyword)
-
-    return get_tw_count_service(keyword)
 
 
 @twitter_route.route("/twitter/keywords/<keyword>/statistics/count", methods=['GET'])
-def get_tw_kw_stats_mirror(keyword):
+def get_tw_kw_count_ts(keyword):
 
 
-    print(keyword)
+    print('in route get_tw_region_kw_lst')
 
-    return get_tw_count_service(keyword)
-
-
-# @twitter_route.route("/twitter/keywords/<keyword>/stats/count", methods=['GET'])
-# def get_tw_count_mirror(keyword):
+    return get_tw_kw_count_ts_service(keyword)
 
 
-#     print(keyword)
+@twitter_route.route("/twitter/regions/keyword-list", methods=['GET'])
+def get_tw_region_kw_lst():
 
-#     return get_tw_count_service(keyword)
+
+    print('in route get_tw_region_kw_lst')
+
+    return get_tw_region_kw_lst_service()

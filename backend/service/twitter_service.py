@@ -49,7 +49,7 @@ def get_count_keyword_7_days(keyword: str):
     return connect_to_endpoint(endpoint_url, query_params)
 
 
-def get_tw_count_service(keyword):
+def get_tw_kw_count_ts_service(keyword):
 
     time_now_dt = datetime.now()
     time_now = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -117,3 +117,114 @@ def get_tw_count_service(keyword):
             }
         }
         return res
+
+# %%
+
+######################################
+def get_trends(url):
+    """
+    ================
+    TWITTER: GET trends/place
+    ================
+    Returns the top 50 trending topics for a specific id, if trending information is available for it.
+    Note: The id parameter for this endpoint is the "where on earth identifier" or WOEID
+
+    # https://developer.twitter.com/en/docs/twitter-api/v1/trends/trends-for-location/api-reference/get-trends-place
+
+    """
+
+    def bearer_oauth(r):
+        """
+        Method required by bearer token authentication.
+        """
+        r.headers["Authorization"] = f"Bearer {bearer_token}"
+        return r
+
+    def connect_to_endpoint(WOEID: str):
+        if not isinstance(WOEID, str):
+            WOEID = str(WOEID)
+        url = "https://api.twitter.com/1.1/trends/place.json?id=" + WOEID
+        response = requests.get(url, auth=bearer_oauth)
+        print(response.status_code)
+        if response.status_code != 200:
+            raise Exception(response.status_code, response.text)
+        return response.json()
+
+    return connect_to_endpoint(url)
+
+def get_woeid_trends():
+    available_data_to_woeid = pd.read_excel(
+        "./data/ELT_JP_WOEID.xlsx", index_col="Area"
+    ).astype("string")
+    available_data_to_woeid = available_data_to_woeid.to_dict("dict")["WOEID"]
+
+    woeid_trends = {}
+
+    for area, woeid_str in available_data_to_woeid.items():
+        print(area + ": " + woeid_str)
+        json_response = get_trends(woeid_str)
+        woeid_trends[area] = json_response
+
+    return woeid_trends
+
+
+def clean_woeid_trends_test(woeid_trends):
+    """
+    ================
+    convert from noSQL to dataframe and prepare for further data cleansing
+    ================
+    Returns dataframe, Japan trendings keywords (list), as_of as timestep
+    """
+    wip_woeid_trends_df = pd.DataFrame()
+    national_trends = set()
+    as_of = []
+    for area in woeid_trends.keys():
+
+        toptrending_all_areas = woeid_trends[area][0]["trends"]
+        SQLite_timeformatted = (
+            woeid_trends[area][0]["as_of"].replace("T", " ").replace("Z", "")
+        )
+        as_of.append(SQLite_timeformatted)
+        row = []
+        for toptrending_all_each_area in toptrending_all_areas:
+            keyword = toptrending_all_each_area["name"]
+            row.append(keyword)
+            national_trends.add(keyword)
+
+        validate = 50 - len(row)
+        if validate > 0:
+            empty_lst = [""] * validate
+            row.extend(empty_lst)
+        elif validate < 0:
+            row = row[:50]
+        wip_woeid_trends_df[area] = row
+    return wip_woeid_trends_df, national_trends, as_of
+
+def get_tw_region_kw_lst_service():
+    
+    print('in twitter service: get_tw_region_kw_lst_service')
+    woeid_trends = get_woeid_trends()
+
+    wip_woeid_trends_df, keywordList, as_of = clean_woeid_trends_test(woeid_trends)    
+
+    time_now_dt = datetime.now()
+    time_now = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
+    time_now_timestamp = datetime.timestamp(time_now_dt)
+    request_id = hex(int(time_now_timestamp*1000000))
+    available_regions = ['北九州', '埼玉', '千葉', '福岡', '浜松', '広島', '川崎', '神戸', '熊本', '名古屋', '新潟', '相模原', '札幌', '仙台', '高松', '東京', '横浜', '沖縄', '大阪', '京都', '岡山', '日本']
+    res = {
+    "status": "success",
+    # I intentionally use list because visualization tool in frontend requires data in this format
+    "keywordList": list(keywordList),
+
+    "id": request_id,
+        "meta": {
+            "description": "top 50 of all available regions",
+            "notes": {
+                "available regions": available_regions
+            }
+    }
+    }
+
+    return res
+    
