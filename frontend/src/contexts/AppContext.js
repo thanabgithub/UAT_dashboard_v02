@@ -7,7 +7,7 @@ export class AppProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: "ダッシュボード",
+      page: "Research",
       isFirstVisit: false,
       ...this.savedSettings(),
       setPage: this.setPage,
@@ -25,7 +25,7 @@ export class AppProvider extends React.Component {
   };
 
   getKeywordList = async () => {
-    console.log("savedSgetKeywordListettings");
+    console.log("getKeywordList");
     let myTimestamp = Date.now();
     let keywordListLocalData = await JSON.parse(
       localStorage.getItem("nowHitKeywordList")
@@ -86,17 +86,17 @@ export class AppProvider extends React.Component {
   };
   savedSettings = () => {
     console.log("savedSettings");
-    let nowHitData = JSON.parse(localStorage.getItem("nowHit"));
+    let nowHitData = JSON.parse(localStorage.getItem("nowHitisFirstVisit"));
     if (!nowHitData) {
-      return { page: "設定", isFirstVisit: true };
+      return { page: "Settings", isFirstVisit: true };
     }
-    return { page: "ダッシュボード" };
+    return { page: "Research" };
   };
 
   handleConfirmFavorite = () => {
     console.log("handleConfirmFavorite");
-    this.setState({ page: "ダッシュボード", isFirstVisit: false });
-    localStorage.setItem("nowHit", JSON.stringify({ test: "hello" }));
+    this.setState({ page: "Research", isFirstVisit: false });
+    localStorage.setItem("nowHitisFirstVisit", JSON.stringify(false));
   };
 
   setPage = (page) => {

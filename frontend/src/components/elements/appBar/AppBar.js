@@ -54,8 +54,8 @@ const AppBar = () => {
     <BarStyle>
       <Logo>NowHit</Logo>
       <div />
-      <ControlButton name="ダッシュボード" />
-      <ControlButton name="設定" />
+      <ControlButton name="Research" />
+      <ControlButton name="Settings" />
     </BarStyle>
   );
 };
