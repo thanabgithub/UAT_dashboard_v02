@@ -7,6 +7,8 @@ const KeywordGridStyled = styled.div`
   color: white;
   font-family: ZenMaruGothic;
   grid-template-columns: repeat(5, 1fr);
+  margin-top: 10px;
+  padding: 0px;
 `;
 
 const KeywordGrid = () => {
