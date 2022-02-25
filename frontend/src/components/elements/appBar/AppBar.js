@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { AppContext } from "../../../contexts/AppContext";
 const Logo = styled.div`
   font-family: Orbitron;
-  font-size: 1.5em;
+  font-size: 1.75em;
   font-weight: 900;
   color: palevioletred;
 `;
@@ -54,7 +54,7 @@ const AppBar = () => {
     <BarStyle>
       <Logo>NowHit</Logo>
       <div />
-      <ControlButton name="ダッシュボード" active />
+      <ControlButton name="ダッシュボード" />
       <ControlButton name="設定" />
     </BarStyle>
   );

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import "./styles/Fonts.js";
-import Welcome from "./pages/setting/Setting";
+import Setting from "./pages/setting/Setting";
 
 import AppLayout from "./components/containers/AppLayout";
 import AppBar from "./components/elements/appBar/AppBar";
@@ -12,8 +12,9 @@ class App extends Component {
     return (
       <AppLayout>
         <AppProvider>
+          {/* the functionality of context provider is to restrict scope of context */}
           <AppBar />
-          <Welcome name="NowHit" />
+          <Setting name="NowHit" />
         </AppProvider>
       </AppLayout>
     );
