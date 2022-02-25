@@ -13,10 +13,8 @@ export default function Welcome(props) {
       {({ isFirstVisit }) =>
         isFirstVisit ? (
           <div>
-            <h2>Welcome to NowHit Research.</h2>
-            <ThinFont>
-              Please select your interest keywords to proceed.
-            </ThinFont>
+            <h2>Welcome to NowHit Research</h2>
+            <ThinFont>Please select your interest keywords to proceed</ThinFont>
           </div>
         ) : null
       }

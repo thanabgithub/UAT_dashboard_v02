@@ -19,6 +19,7 @@ export class AppProvider extends React.Component {
   }
 
   componentDidMount = () => {
+    console.log("this.state.isFirstVisit: " + this.state.isFirstVisit);
     if (this.state.isFirstVisit) {
       console.log("store preload data");
       this.fetchPreloadKeywordListApi();
@@ -48,6 +49,10 @@ export class AppProvider extends React.Component {
       let isExpired = minutesSinceLastFetch > MAX_AGE_NOWHIT_KEYWORD;
       console.log("isExpired: " + isExpired);
       if (isExpired) this.fetchKeywordListApi();
+      else {
+        let nowHitKeywordListData = keywordListLocalData;
+        this.setState({ nowHitKeywordListData });
+      }
     }
   };
 

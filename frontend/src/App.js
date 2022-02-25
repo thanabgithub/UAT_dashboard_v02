@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import "./styles/Fonts.js";
+import "./styles/WebFontLoader";
 import Settings from "./pages/settings/index";
 
 import AppLayout from "./components/containers/AppLayout";

@@ -1,8 +1,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { AppContext } from "../../../contexts/AppContext";
+
 const Logo = styled.div`
-  font-family: Orbitron;
   font-size: 1.75em;
   font-weight: 900;
   color: palevioletred;
