@@ -20,6 +20,7 @@ numpy = "*"
 scipy = "*"
 uuid = "*"
 openpyxl = "*"
+apscheduler = "*"
 
 [dev-packages]
 

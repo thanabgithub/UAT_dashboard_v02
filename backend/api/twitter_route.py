@@ -32,6 +32,15 @@ def get_tw_kw_count_ts(keyword):
 def get_tw_region_kw_lst():
 
 
-    print('in route get_tw_region_kw_lst')
+    print('in route: get_tw_region_kw_lst')
 
     return get_tw_region_kw_lst_service()
+
+@twitter_route.route("/twitter/regions/preload-keyword-list", methods=['GET'])
+def get_tw_region_preload_kw_lst():
+
+
+    print('in route: get_tw_region_kw_lst')
+
+    return get_tw_region_preload_kw_lst_service()
+
