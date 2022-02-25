@@ -1,5 +1,7 @@
 import React from "react";
 
+// To clean those API functions and move to adapter folders
+
 export const AppContext = React.createContext();
 
 const MAX_AGE_NOWHIT_KEYWORD = 15; // 15 mins
@@ -21,10 +23,10 @@ export class AppProvider extends React.Component {
       console.log("store preload data");
       this.fetchPreloadKeywordListApi();
     }
-    this.getKeywordList();
+    this.getKeywordListRecent();
   };
 
-  getKeywordList = async () => {
+  getKeywordListRecent = async () => {
     console.log("getKeywordList");
     let myTimestamp = Date.now();
     let keywordListLocalData = await JSON.parse(
@@ -48,14 +50,11 @@ export class AppProvider extends React.Component {
       if (isExpired) this.fetchKeywordListApi();
     }
   };
+
   fetchKeywordListApi = async () => {
     await fetch("http://10.10.100.2:5050/twitter/regions/keyword-list")
       .then((res) => res.json())
       .then((nowHitKeywordListData) => {
-        console.log(nowHitKeywordListData);
-        console.log("status: " + nowHitKeywordListData.status);
-        let timestamp = Date.now();
-        console.log(timestamp);
         this.setState({ nowHitKeywordListData });
         localStorage.setItem(
           "nowHitKeywordList",
@@ -70,10 +69,6 @@ export class AppProvider extends React.Component {
     await fetch("http://10.10.100.2:5050/twitter/regions/preload-keyword-list")
       .then((res) => res.json())
       .then((nowHitKeywordListData) => {
-        console.log(nowHitKeywordListData);
-        console.log("status: " + nowHitKeywordListData.status);
-        let timestamp = Date.now();
-        console.log(timestamp);
         this.setState({ nowHitKeywordListData });
         localStorage.setItem(
           "nowHitKeywordList",
@@ -86,7 +81,9 @@ export class AppProvider extends React.Component {
   };
   savedSettings = () => {
     console.log("savedSettings");
-    let nowHitData = JSON.parse(localStorage.getItem("nowHitisFirstVisit"));
+    let nowHitData = JSON.parse(
+      localStorage.getItem("nowHitisExistingVisitor")
+    );
     if (!nowHitData) {
       return { page: "Settings", isFirstVisit: true };
     }
@@ -96,7 +93,7 @@ export class AppProvider extends React.Component {
   handleConfirmFavorite = () => {
     console.log("handleConfirmFavorite");
     this.setState({ page: "Research", isFirstVisit: false });
-    localStorage.setItem("nowHitisFirstVisit", JSON.stringify(false));
+    localStorage.setItem("nowHitisExistingVisitor", JSON.stringify(true));
   };
 
   setPage = (page) => {
