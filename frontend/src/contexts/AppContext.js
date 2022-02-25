@@ -15,13 +15,14 @@ export class AppProvider extends React.Component {
     };
   }
 
-  savedSettings() {
+  savedSettings = () => {
+    console.log("savedSettings");
     let nowHitData = JSON.parse(localStorage.getItem("nowHit"));
     if (!nowHitData) {
       return { page: "設定", isFirstVisit: true };
     }
     return { page: "ダッシュボード" };
-  }
+  };
 
   handleConfirmFavorite = () => {
     console.log("handleConfirmFavorite");

@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- 小さいデバイスでもフィットするテニック
+    https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86"
+    />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="ツイッターの直近トレンド ウェブアブリ" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
@@ -13,7 +18,6 @@
     <title>ナウヒット</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
 </html>
