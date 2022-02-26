@@ -8,7 +8,7 @@ const KeywordGridStyled = styled.div`
   display: grid;
   color: white;
 
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
   margin-top: 10px;
   padding: 0px;
   ${fontFamilyReading};
@@ -35,7 +35,11 @@ const KeywordGrid = ({ topSection }) => {
             topSection,
             favorites
           ).map((keyword) => (
-            <KeywordCardGrid keyword={keyword} topSection={topSection} />
+            <KeywordCardGrid
+              key={keyword}
+              keyword={keyword}
+              topSection={topSection}
+            />
           ))}
         </KeywordGridStyled>
       )}

@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import { AppContext } from "../../../contexts/AppContext";
 
 const Logo = styled.div`
+  justify-self: self-start;
   font-size: 1.75em;
   font-weight: 900;
   color: palevioletred;
@@ -10,14 +11,16 @@ const Logo = styled.div`
 // #fe9ea8
 const ControlButtonStyle = styled.div`
   cursor: pointer;
-
+  padding-right: 0.75em;
+  font-size: 0.75em;
   color: palevioletred;
+  display: flex;
+  justify-self: self-end;
   ${(props) =>
     props.active &&
     css`
-      font-weight: 500;
       color: white;
-      text-shadow: #fc0 1px 0 10px;
+      text-shadow: #fc0 0px 0px 1px 1px;
     `}
 `;
 
@@ -45,8 +48,9 @@ const setProperCase = (lower) => {
 
 const BarStyle = styled.div`
   display: grid;
-  grid-template-columns: 180px auto 120px 120px;
-  margin-bottom: 40px; ;
+  grid-template-columns: 7em auto 6em 6em;
+  margin-bottom: 2em;
+  align-items: center;
 `;
 
 const AppBar = () => {

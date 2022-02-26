@@ -6,7 +6,7 @@ export const AppContext = React.createContext();
 export const MAX_FAVORITES = 50;
 
 const TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL =
-  "http://10.10.100.2:5050/twitter/keywords/national-ranks/all";
+  "http://192.168.1.33:5050/twitter/keywords/national-ranks/all";
 
 const MAX_AGE_DATA_GRID = 5 * 60;
 // 5 mins
@@ -24,6 +24,7 @@ export class AppProvider extends React.Component {
       removeKeyword: this.removeKeyword,
       isInFavorites: this.isInFavorites,
       handleConfirmFavorite: this.handleConfirmFavorite,
+      sortObject: this.sortObject,
     };
   }
   addKeyword = (keyword) => {
@@ -31,14 +32,12 @@ export class AppProvider extends React.Component {
     if (favorites.length < MAX_FAVORITES) {
       favorites.push(keyword);
       this.setState({ favorites });
-      console.log(this.state.favorites);
     }
   };
   removeKeyword = (keyword) => {
     let favorites = [...this.state.favorites];
 
     this.setState({ favorites: _.pull(favorites, keyword) });
-    console.log(this.state.favorites);
   };
 
   isInFavorites = (keyword) => _.includes(this.state.favorites, keyword);
@@ -69,6 +68,7 @@ export class AppProvider extends React.Component {
     await fetch(TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL)
       .then((res) => res.json())
       .then((nowHitTwitterAllKeywordsAllNationalRanks) => {
+        console.log(nowHitTwitterAllKeywordsAllNationalRanks);
         this.setState({ nowHitTwitterAllKeywordsAllNationalRanks });
         localStorage.setItem(
           "nowHitTwitterAllKeywordsAllNationalRanks",

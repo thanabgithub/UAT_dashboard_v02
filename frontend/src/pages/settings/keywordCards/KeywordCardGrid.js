@@ -13,6 +13,7 @@ const ImgStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 6em;
 `;
 
 function clickKeywordHandler(topSection, keyword, addKeyword, removeKeyword) {
@@ -41,7 +42,6 @@ const KeywordCardGrid = ({
       }) => {
         let keywordItems =
           nowHitTwitterAllKeywordsAllNationalRanks.data[keyword];
-        console.log(keyword);
         let rank = keywordItems.rank;
         let TileClass = SelectableTile;
         if (topSection) {

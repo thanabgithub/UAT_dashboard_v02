@@ -8,8 +8,9 @@ import {
 
 export const Tile = styled.div`
   ${lightGreyBackground};
-  padding: 10px;
+  padding: 0.5em;
   border-radius: 0.25em;
+  height: 10em;
 `;
 
 export const SelectableTile = styled(

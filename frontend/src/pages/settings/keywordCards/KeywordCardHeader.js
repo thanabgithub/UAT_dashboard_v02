@@ -6,12 +6,14 @@ export const KeyboardCardHeaderStyled = styled.div`
   display: grid;
   grid-template-columns: auto 0.25fr;
   margin-bottom: 0.5em;
+  height: 2em;
 `;
 
 export const KeywordLayout = styled.div`
   justify-self: self-start;
   font-size: 0.75em;
   font-weight: 900;
+  width: 90%;
 `;
 // export const fontSize2 = "font-size: 0.75em";
 // export const fontSize3 = "font-size: .50em";
