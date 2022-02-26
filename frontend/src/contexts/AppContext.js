@@ -1,5 +1,5 @@
 import React from "react";
-
+import _ from "lodash";
 // To clean those API functions and move to adapter folders
 
 export const AppContext = React.createContext();
@@ -8,8 +8,8 @@ export const MAX_FAVORITES = 50;
 const TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL =
   "http://10.10.100.2:5050/twitter/keywords/national-ranks/all";
 
-const MAX_AGE_DATA_GRID = 5 * 60 * 60;
-// 6 hours
+const MAX_AGE_DATA_GRID = 5 * 60;
+// 5 mins
 
 export class AppProvider extends React.Component {
   constructor(props) {
@@ -21,6 +21,8 @@ export class AppProvider extends React.Component {
       ...this.savedSettings(),
       setPage: this.setPage,
       addKeyword: this.addKeyword,
+      removeKeyword: this.removeKeyword,
+      isInFavorites: this.isInFavorites,
       handleConfirmFavorite: this.handleConfirmFavorite,
     };
   }
@@ -32,6 +34,15 @@ export class AppProvider extends React.Component {
       console.log(this.state.favorites);
     }
   };
+  removeKeyword = (keyword) => {
+    let favorites = [...this.state.favorites];
+
+    this.setState({ favorites: _.pull(favorites, keyword) });
+    console.log(this.state.favorites);
+  };
+
+  isInFavorites = (keyword) => _.includes(this.state.favorites, keyword);
+
   componentDidMount = () => {
     console.log("in componentDidMount");
     let nowHitTwitterAllKeywordsAllNationalRanks = JSON.parse(
@@ -58,8 +69,6 @@ export class AppProvider extends React.Component {
     await fetch(TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL)
       .then((res) => res.json())
       .then((nowHitTwitterAllKeywordsAllNationalRanks) => {
-        console.log(nowHitTwitterAllKeywordsAllNationalRanks);
-        console.log(Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data));
         this.setState({ nowHitTwitterAllKeywordsAllNationalRanks });
         localStorage.setItem(
           "nowHitTwitterAllKeywordsAllNationalRanks",
@@ -73,23 +82,28 @@ export class AppProvider extends React.Component {
 
   savedSettings = () => {
     console.log("savedSettings");
-    let nowHitisExistingVisitor = JSON.parse(
+    let isExistingVisitor = JSON.parse(
       localStorage.getItem("nowHitisExistingVisitor")
     );
 
-    if (!nowHitisExistingVisitor) {
-      console.log("isNewVisit");
-
+    let favorites = JSON.parse(localStorage.getItem("nowHitFavorites"));
+    if (!isExistingVisitor || !favorites) {
       return { page: "Settings", isFirstVisit: true };
     }
-
-    return { page: "Research" };
+    if (!favorites) {
+      return { page: "Research" };
+    }
+    return { page: "Research", favorites: favorites };
   };
 
   handleConfirmFavorite = () => {
     console.log("handleConfirmFavorite");
     this.setState({ page: "Research", isFirstVisit: false });
     localStorage.setItem("nowHitisExistingVisitor", JSON.stringify(true));
+    localStorage.setItem(
+      "nowHitFavorites",
+      JSON.stringify(this.state.favorites)
+    );
   };
 
   setPage = (page) => {

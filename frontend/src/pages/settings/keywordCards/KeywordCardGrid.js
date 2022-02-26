@@ -33,7 +33,12 @@ const KeywordCardGrid = ({
 }) => {
   return (
     <AppContext.Consumer>
-      {({ nowHitTwitterAllKeywordsAllNationalRanks, addKeyword }) => {
+      {({
+        nowHitTwitterAllKeywordsAllNationalRanks,
+        addKeyword,
+        removeKeyword,
+        isInFavorites,
+      }) => {
         let keywordItems =
           nowHitTwitterAllKeywordsAllNationalRanks.data[keyword];
         console.log(keyword);
@@ -41,6 +46,9 @@ const KeywordCardGrid = ({
         let TileClass = SelectableTile;
         if (topSection) {
           TileClass = DeletableTile;
+        } else if (isInFavorites(keyword)) {
+          //TileClass = DisableTile;
+          return;
         }
         return (
           <TileClass
