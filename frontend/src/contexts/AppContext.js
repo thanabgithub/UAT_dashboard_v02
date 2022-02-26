@@ -3,6 +3,8 @@ import React from "react";
 // To clean those API functions and move to adapter folders
 
 export const AppContext = React.createContext();
+export const MAX_FAVORITES = 50;
+
 const TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL =
   "http://10.10.100.2:5050/twitter/keywords/national-ranks/all";
 
@@ -15,12 +17,21 @@ export class AppProvider extends React.Component {
     this.state = {
       page: "Research",
       isFirstVisit: false,
+      favorites: [],
       ...this.savedSettings(),
       setPage: this.setPage,
+      addKeyword: this.addKeyword,
       handleConfirmFavorite: this.handleConfirmFavorite,
     };
   }
-
+  addKeyword = (keyword) => {
+    let favorites = [...this.state.favorites];
+    if (favorites.length < MAX_FAVORITES) {
+      favorites.push(keyword);
+      this.setState({ favorites });
+      console.log(this.state.favorites);
+    }
+  };
   componentDidMount = () => {
     console.log("in componentDidMount");
     let nowHitTwitterAllKeywordsAllNationalRanks = JSON.parse(

@@ -15,10 +15,25 @@ const ImgStyle = styled.div`
   justify-content: center;
 `;
 
-const KeywordCardGrid = ({ keyword, topSection }) => {
+function clickKeywordHandler(topSection, keyword, addKeyword, removeKeyword) {
+  return topSection
+    ? () => {
+        removeKeyword(keyword);
+      }
+    : () => {
+        addKeyword(keyword);
+      };
+}
+
+const KeywordCardGrid = ({
+  keyword,
+  topSection,
+  addKeyword,
+  removeKeyword,
+}) => {
   return (
     <AppContext.Consumer>
-      {({ nowHitTwitterAllKeywordsAllNationalRanks }) => {
+      {({ nowHitTwitterAllKeywordsAllNationalRanks, addKeyword }) => {
         let keywordItems =
           nowHitTwitterAllKeywordsAllNationalRanks.data[keyword];
         console.log(keyword);
@@ -28,7 +43,14 @@ const KeywordCardGrid = ({ keyword, topSection }) => {
           TileClass = DeletableTile;
         }
         return (
-          <TileClass>
+          <TileClass
+            onClick={clickKeywordHandler(
+              topSection,
+              keyword,
+              addKeyword,
+              removeKeyword
+            )}
+          >
             <KeywordCardHeader
               topSection={topSection}
               keyword={keyword}

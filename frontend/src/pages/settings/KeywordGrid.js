@@ -17,22 +17,23 @@ const KeywordGridStyled = styled.div`
 
 function getKeywordsToDisplay(
   nowHitTwitterAllKeywordsAllNationalRanks,
-  topSection
+  topSection,
+  favorites
 ) {
-  return Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(
-    0,
-    topSection ? 4 : 20
-  );
+  return topSection
+    ? favorites
+    : Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(0, 20);
 }
 
 const KeywordGrid = ({ topSection }) => {
   return (
     <AppContext.Consumer>
-      {({ nowHitTwitterAllKeywordsAllNationalRanks }) => (
+      {({ nowHitTwitterAllKeywordsAllNationalRanks, favorites }) => (
         <KeywordGridStyled>
           {getKeywordsToDisplay(
             nowHitTwitterAllKeywordsAllNationalRanks,
-            topSection
+            topSection,
+            favorites
           ).map((keyword) => (
             <KeywordCardGrid keyword={keyword} topSection={topSection} />
           ))}
