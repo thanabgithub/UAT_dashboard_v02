@@ -152,21 +152,6 @@ def get_trends(url):
 
     return connect_to_endpoint(url)
 
-def get_woeid_trends():
-    available_data_to_woeid = pd.read_excel(
-        "./data/ELT_JP_WOEID.xlsx", index_col="Area"
-    ).astype("string")
-    available_data_to_woeid = available_data_to_woeid.to_dict("dict")["WOEID"]
-
-    woeid_trends = {}
-
-    for area, woeid_str in available_data_to_woeid.items():
-        print(area + ": " + woeid_str)
-        json_response = get_trends(woeid_str)
-        woeid_trends[area] = json_response
-
-    return woeid_trends
-
 
 def clean_woeid_trends_test(woeid_trends):
     """
@@ -177,6 +162,7 @@ def clean_woeid_trends_test(woeid_trends):
     """
     wip_woeid_trends_df = pd.DataFrame()
     national_trends = set()
+    regional_trends = set()
     as_of = []
     for area in woeid_trends.keys():
 
@@ -189,8 +175,10 @@ def clean_woeid_trends_test(woeid_trends):
         for toptrending_all_each_area in toptrending_all_areas:
             keyword = toptrending_all_each_area["name"]
             row.append(keyword)
-            national_trends.add(keyword)
-
+            if area == "日本":
+                national_trends.add(keyword)
+            else:
+                regional_trends.add(keyword)
         validate = 50 - len(row)
         if validate > 0:
             empty_lst = [""] * validate
@@ -198,6 +186,7 @@ def clean_woeid_trends_test(woeid_trends):
         elif validate < 0:
             row = row[:50]
         wip_woeid_trends_df[area] = row
+        national_trends = national_trends.union(regional_trends)
     return wip_woeid_trends_df, national_trends, as_of
 
 def get_tw_region_kw_lst_service():
@@ -266,7 +255,7 @@ def set_tw_region_preload_kw_lst_service():
     "keywordList": list(keywordList),
 
     "id": request_id,
-    "timestamp": time_now_timestamp*1000, # adjust it to be the same with javascript
+    "timestamp_ms": time_now_timestamp*1000, # adjust it to be the same with javascript
         "meta": {
             "description": "top 50 of all available regions",
             "notes": {
@@ -278,6 +267,8 @@ def set_tw_region_preload_kw_lst_service():
     out_file = open("data/preloadRes.json", "w")
     json.dump(preload_res, out_file)
     out_file.close()
+    
+    
 # %%
 # import json
 

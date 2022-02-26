@@ -21,6 +21,9 @@ scipy = "*"
 uuid = "*"
 openpyxl = "*"
 apscheduler = "*"
+varname = "*"
+google-images-search = "*"
+windows-curses = "*"
 
 [dev-packages]
 

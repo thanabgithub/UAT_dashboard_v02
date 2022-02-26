@@ -13,7 +13,7 @@ export class AppProvider extends React.Component {
       isFirstVisit: false,
       ...this.savedSettings(),
       setPage: this.setPage,
-
+      getImage: this.getImage,
       handleConfirmFavorite: this.handleConfirmFavorite,
     };
   }

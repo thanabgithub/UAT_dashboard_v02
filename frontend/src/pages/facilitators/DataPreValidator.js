@@ -12,7 +12,12 @@ const DataPreValidator = (props) => {
         if (!nowHitKeywordListData) {
           console.log("読み込み中");
 
-          return <div> 読み込み中</div>;
+          return (
+            <div>
+              {" "}
+              <h1>. . . 読み込み中 . . .</h1>
+            </div>
+          );
         }
         return <div> {props.children}</div>;
       }}

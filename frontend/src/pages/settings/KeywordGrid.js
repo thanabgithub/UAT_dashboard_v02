@@ -15,12 +15,16 @@ const KeywordGridStyled = styled.div`
   grid-gap 15px
 `;
 
+function getKeywordsToDisplay(nowHitKeywordListData) {
+  return nowHitKeywordListData.keywordList.slice(0, 40);
+}
+
 const KeywordGrid = () => {
   return (
     <AppContext.Consumer>
       {({ nowHitKeywordListData }) => (
         <KeywordGridStyled>
-          {nowHitKeywordListData.keywordList.map((keyword) => (
+          {getKeywordsToDisplay(nowHitKeywordListData).map((keyword) => (
             <SelectableTile>{keyword}</SelectableTile>
           ))}
         </KeywordGridStyled>
