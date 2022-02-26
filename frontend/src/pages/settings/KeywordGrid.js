@@ -1,7 +1,9 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { AppContext } from "../../contexts/AppContext";
 import { fontFamilyReading } from "../../styles/Variants";
+import { SelectableTile } from "../../components/containers/Tile";
+
 const KeywordGridStyled = styled.div`
   display: grid;
   color: white;
@@ -10,6 +12,7 @@ const KeywordGridStyled = styled.div`
   margin-top: 10px;
   padding: 0px;
   ${fontFamilyReading};
+  grid-gap 15px
 `;
 
 const KeywordGrid = () => {
@@ -18,7 +21,7 @@ const KeywordGrid = () => {
       {({ nowHitKeywordListData }) => (
         <KeywordGridStyled>
           {nowHitKeywordListData.keywordList.map((keyword) => (
-            <div>{keyword}</div>
+            <SelectableTile>{keyword}</SelectableTile>
           ))}
         </KeywordGridStyled>
       )}

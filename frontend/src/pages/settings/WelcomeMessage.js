@@ -1,6 +1,6 @@
 import React from "react";
 import { AppContext } from "../../contexts/AppContext";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 const ThinFont = styled.div`
   font-family: Orbitron;
 
