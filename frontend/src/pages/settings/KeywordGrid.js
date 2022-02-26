@@ -8,7 +8,7 @@ const KeywordGridStyled = styled.div`
   display: grid;
   color: white;
 
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   margin-top: 10px;
   padding: 0px;
   ${fontFamilyReading};
@@ -22,7 +22,7 @@ function getKeywordsToDisplay(
 ) {
   return topSection
     ? favorites
-    : Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(0, 20);
+    : Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(0, 48);
 }
 
 const KeywordGrid = ({ topSection }) => {
@@ -44,5 +44,3 @@ const KeywordGrid = ({ topSection }) => {
 };
 
 export default KeywordGrid;
-
-// {nowHitKeywordListData.keywordList.length}
