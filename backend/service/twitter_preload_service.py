@@ -1,11 +1,13 @@
 # %%
 
-from service.twitter_service import *
+
 import pandas as pd
 import requests
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+import requests_cache
+import json
 
 load_dotenv()
 bearer_token = os.environ.get("BEARER_TOKEN")
@@ -19,7 +21,73 @@ requests_cache.install_cache(
 )
 
 # %%
+def get_trends(url):
+    """
+    ================
+    TWITTER: GET trends/place
+    ================
+    Returns the top 50 trending topics for a specific id, if trending information is available for it.
+    Note: The id parameter for this endpoint is the "where on earth identifier" or WOEID
 
+    # https://developer.twitter.com/en/docs/twitter-api/v1/trends/trends-for-location/api-reference/get-trends-place
+
+    """
+
+    def bearer_oauth(r):
+        """
+        Method required by bearer token authentication.
+        """
+        r.headers["Authorization"] = f"Bearer {bearer_token}"
+        return r
+
+    def connect_to_endpoint(WOEID: str):
+        if not isinstance(WOEID, str):
+            WOEID = str(WOEID)
+        url = "https://api.twitter.com/1.1/trends/place.json?id=" + WOEID
+        response = requests.get(url, auth=bearer_oauth)
+        print(response.status_code)
+        if response.status_code != 200:
+            raise Exception(response.status_code, response.text)
+        return response.json()
+
+    return connect_to_endpoint(url)
+
+
+def clean_woeid_trends_test(woeid_trends):
+    """
+    ================
+    convert from noSQL to dataframe and prepare for further data cleansing
+    ================
+    Returns dataframe, Japan trendings keywords (list), as_of as timestep
+    """
+    wip_woeid_trends_df = pd.DataFrame()
+    national_trends = set()
+    regional_trends = set()
+    as_of = []
+    for area in woeid_trends.keys():
+
+        toptrending_all_areas = woeid_trends[area][0]["trends"]
+        SQLite_timeformatted = (
+            woeid_trends[area][0]["as_of"].replace("T", " ").replace("Z", "")
+        )
+        as_of.append(SQLite_timeformatted)
+        row = []
+        for toptrending_all_each_area in toptrending_all_areas:
+            keyword = toptrending_all_each_area["name"]
+            row.append(keyword)
+            if area == "日本":
+                national_trends.add(keyword)
+            else:
+                regional_trends.add(keyword)
+        validate = 50 - len(row)
+        if validate > 0:
+            empty_lst = [""] * validate
+            row.extend(empty_lst)
+        elif validate < 0:
+            row = row[:50]
+        wip_woeid_trends_df[area] = row
+        national_trends = national_trends.union(regional_trends)
+    return wip_woeid_trends_df, national_trends, as_of
 
 def get_woeid_trends():
     """
@@ -66,13 +134,13 @@ def init_preload_data(meta):
         In the other words, user inputs variable on the most left side to get most right side.
     """
 
-    region_to_rank_to_keyword = {"data": {}, "meta": meta}
-    rank_to_keyword_agg = {"data": {}, "meta": meta}
+    region_to_rank_to_keyword = {"data": {}, "preloadMeta": meta}
+    rank_to_keyword_agg = {"data": {}, "preloadMeta": meta}
 
-    keyword_to_region_to_rank = {"data": {}, "meta": meta}
-    keyword_to_rank_agg = {"data": {}, "meta": meta}
+    keyword_to_region_to_rank = {"data": {}, "preloadMeta": meta}
+    keyword_to_rank_agg = {"data": {}, "preloadMeta": meta}
 
-    region_to_unqiue_keyword = {"data": {}, "meta": meta}
+    region_to_unqiue_keyword = {"data": {}, "preloadMeta": meta}
 
     return (
         region_to_rank_to_keyword,
@@ -83,7 +151,7 @@ def init_preload_data(meta):
     )
 
 
-def process_rank_data(
+def process_rank_data(woeid_trends,
     region_to_rank_to_keyword,
     rank_to_keyword_agg,
     keyword_to_region_to_rank,
@@ -155,6 +223,7 @@ def add_img_url(keyword_to_rank_agg):
 
     _search_params = {
         "num": 1,
+        'imgSize': 'MEDIUM',
     }
     gcs_search_keywords = list(keyword_to_rank_agg["data"].keys())
     for index, gcs_search_keyword in enumerate(gcs_search_keywords):

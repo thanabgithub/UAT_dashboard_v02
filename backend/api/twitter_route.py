@@ -1,5 +1,5 @@
 
-from service.twitter_service import *
+from service.twitter_client_service import *
 import pandas as pd
 from flask import Blueprint
 twitter_route = Blueprint('twitter_route', __name__)
@@ -19,28 +19,40 @@ def index():
 
 
 
-@twitter_route.route("/twitter/keywords/<keyword>/statistics/count", methods=['GET'])
-def get_tw_kw_count_ts(keyword):
+@twitter_route.route("/twitter/keywords/<keyword>/time-series", methods=['GET'])
+def get_twitter_keyword_timeseries(keyword):
 
 
-    print('in route get_tw_region_kw_lst')
+    print('in route: /twitter/keywords/<keyword>/time-series')
 
-    return get_tw_kw_count_ts_service(keyword)
-
-
-@twitter_route.route("/twitter/regions/keyword-list", methods=['GET'])
-def get_tw_region_kw_lst():
+    return get_twitter_keyword_timeseries_service(keyword)
 
 
-    print('in route: get_tw_region_kw_lst')
-
-    return get_tw_region_kw_lst_service()
-
-@twitter_route.route("/twitter/regions/preload-keyword-list", methods=['GET'])
-def get_tw_region_preload_kw_lst():
+@twitter_route.route("/twitter/keywords/national-ranks/all", methods=['GET'])
+def get_twitter_all_keywords_all_national_ranks():
+    print('in route: /twitter/keywords/national-ranks/all')
+    return get_twitter_all_keywords_all_national_ranks_service()
 
 
-    print('in route: get_tw_region_kw_lst')
+@twitter_route.route("/twitter/keywords/all/regions/all/ranks/all", methods=['GET'])
+def get_twitter_all_keywords_all_regions_all_ranks():
+    print('in route: /twitter/keywords/all/regions/all/ranks/all')
+    return get_twitter_all_keywords_all_regions_all_ranks_service()
 
-    return get_tw_region_preload_kw_lst_service()
+@twitter_route.route("/twitter/national-ranks/all/keywords/all", methods=['GET'])
+def get_twitter_all_national_ranks_all_keywords():
+    print('in route: /twitter/national-ranks/all/keywords/all')
+    return get_twitter_all_national_ranks_all_keywords_service()
+
+
+# @twitter_route.route("/twitter/regions/all/ranks/all/keywords/all", methods=['GET'])
+# def get_twitter_all_regions_all_ranks_all_keywords():
+#     print('in route: /twitter/regions/all/ranks/all/keywords/all')
+#     return get_twitter_all_regions_all_ranks_all_keywords_service()
+
+
+# @twitter_route.route("/twitter/regions/all/unique-keywords/all", methods=['GET'])
+# def get_twitter_all_regions_all_ranks_all_keywords():
+#     print('in route: /twitter/regions/all/unique-keywords/all')
+#     return get_twitter_all_regions_all_uniquekeywords_service()
 
