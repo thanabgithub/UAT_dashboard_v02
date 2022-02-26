@@ -121,8 +121,7 @@ def get_twitter_keyword_timeseries_service(keyword):
 
 ######################################
 
-
-def get_twitter_all_keywords_all_national_ranks_service():
+def get_twitter_national_ranks_keywords_service():
     time_now_dt = datetime.now()
     requestDatetime = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
     requestTimestampMillisec = datetime.timestamp(time_now_dt) * 1000
@@ -135,11 +134,49 @@ def get_twitter_all_keywords_all_national_ranks_service():
         "comment": 'cache/real-time'
     }
     
-    with open("./data/preloadJSON/keyword_to_rank_agg.json") as jsonFile:
+    with open("./data/preloadJSON/national_df_json_data.json") as jsonFile:
         res = json.load(jsonFile)
         jsonFile.close()
     res['meta'] = meta
     return res
 
+def get_twitter_regional_ranks_keywords_service():
+    print('in get_twitter_regional_ranks_keywords_service')
+    time_now_dt = datetime.now()
+    requestDatetime = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
+    requestTimestampMillisec = datetime.timestamp(time_now_dt) * 1000
+    requestId = hex(int(requestTimestampMillisec * 1000))
+
+    meta = {
+        "requestDatetime": requestDatetime,
+        "requestTimestampMillisec": requestTimestampMillisec,
+        "requestId": requestId,
+        "comment": 'cache/real-time'
+    }
+    
+    with open("./data/preloadJSON/regional_df_json_data.json") as jsonFile:
+        res = json.load(jsonFile)
+        jsonFile.close()
+    res['meta'] = meta
+    return res
+
+# def get_twitter_all_keywords_all_national_ranks_service():
+#     time_now_dt = datetime.now()
+#     requestDatetime = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
+#     requestTimestampMillisec = datetime.timestamp(time_now_dt) * 1000
+#     requestId = hex(int(requestTimestampMillisec * 1000))
+
+#     meta = {
+#         "requestDatetime": requestDatetime,
+#         "requestTimestampMillisec": requestTimestampMillisec,
+#         "requestId": requestId,
+#         "comment": 'cache/real-time'
+#     }
+    
+#     with open("./data/preloadJSON/keyword_to_rank_agg.json") as jsonFile:
+#         res = json.load(jsonFile)
+#         jsonFile.close()
+#     res['meta'] = meta
+#     return res
 
     
