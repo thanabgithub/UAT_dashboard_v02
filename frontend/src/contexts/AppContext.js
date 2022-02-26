@@ -3,8 +3,12 @@ import React from "react";
 // To clean those API functions and move to adapter folders
 
 export const AppContext = React.createContext();
+const TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL =
+  "http://10.10.100.2:5050/twitter/keywords/national-ranks/all";
 
-const MAX_AGE_NOWHIT_KEYWORD = 15; // 15 mins
+const MAX_AGE_DATA_GRID = 5 * 60 * 60;
+// 6 hours
+
 export class AppProvider extends React.Component {
   constructor(props) {
     super(props);
@@ -13,85 +17,61 @@ export class AppProvider extends React.Component {
       isFirstVisit: false,
       ...this.savedSettings(),
       setPage: this.setPage,
-      getImage: this.getImage,
       handleConfirmFavorite: this.handleConfirmFavorite,
     };
   }
 
   componentDidMount = () => {
-    console.log("this.state.isFirstVisit: " + this.state.isFirstVisit);
-    if (this.state.isFirstVisit) {
-      console.log("store preload data");
-      this.fetchPreloadKeywordListApi();
-    }
-    this.getKeywordListRecent();
-  };
-
-  getKeywordListRecent = async () => {
-    console.log("getKeywordList");
-    let myTimestamp = Date.now();
-    let keywordListLocalData = await JSON.parse(
-      localStorage.getItem("nowHitKeywordList")
+    console.log("in componentDidMount");
+    let nowHitTwitterAllKeywordsAllNationalRanks = JSON.parse(
+      localStorage.getItem("nowHitTwitterAllKeywordsAllNationalRanks")
     );
-    if (!keywordListLocalData) {
-      this.fetchKeywordListApi();
-    } else {
-      let minutesSinceLastFetch =
-        (myTimestamp - keywordListLocalData.timestamp) / 1000.0 / 60.0;
-      minutesSinceLastFetch = Math.round(minutesSinceLastFetch * 100) / 100;
-      console.log("minutesSinceLastFetch: " + minutesSinceLastFetch);
-      console.log("myTimestamp: " + myTimestamp);
-      console.log(
-        "keywordListLocalData.timestamp: " + keywordListLocalData.timestamp
-      );
-
-      // 5 mins
-      let isExpired = minutesSinceLastFetch > MAX_AGE_NOWHIT_KEYWORD;
-      console.log("isExpired: " + isExpired);
-      if (isExpired) this.fetchKeywordListApi();
-      else {
-        let nowHitKeywordListData = keywordListLocalData;
-        this.setState({ nowHitKeywordListData });
-      }
+    let refreshNowHitTwitterAllKeywordsAllNationalRanks = true;
+    if (nowHitTwitterAllKeywordsAllNationalRanks) {
+      this.setState({ nowHitTwitterAllKeywordsAllNationalRanks });
+      let timestamp =
+        nowHitTwitterAllKeywordsAllNationalRanks.meta.requestTimestampMillisec;
+      let now = Date.now();
+      let timePassed = now - timestamp;
+      console.log(timePassed);
+      if (timePassed < MAX_AGE_DATA_GRID)
+        refreshNowHitTwitterAllKeywordsAllNationalRanks = false;
     }
+
+    if (refreshNowHitTwitterAllKeywordsAllNationalRanks)
+      this.fetchTwitterAllKeywordsAllNationalRanks();
   };
 
-  fetchKeywordListApi = async () => {
-    await fetch("http://10.10.100.2:5050/twitter/regions/keyword-list")
+  fetchTwitterAllKeywordsAllNationalRanks = async () => {
+    console.log("in fetchTwitterAllKeywordsAllNationalRanks");
+    await fetch(TWITTER_ALL_KEYWORDS_ALL_NATIONAL_RANKS_URL)
       .then((res) => res.json())
-      .then((nowHitKeywordListData) => {
-        this.setState({ nowHitKeywordListData });
+      .then((nowHitTwitterAllKeywordsAllNationalRanks) => {
+        console.log(nowHitTwitterAllKeywordsAllNationalRanks);
+        console.log(Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data));
+        this.setState({ nowHitTwitterAllKeywordsAllNationalRanks });
         localStorage.setItem(
-          "nowHitKeywordList",
-          JSON.stringify(nowHitKeywordListData)
+          "nowHitTwitterAllKeywordsAllNationalRanks",
+          JSON.stringify(nowHitTwitterAllKeywordsAllNationalRanks)
         );
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  fetchPreloadKeywordListApi = async () => {
-    await fetch("http://10.10.100.2:5050/twitter/regions/preload-keyword-list")
-      .then((res) => res.json())
-      .then((nowHitKeywordListData) => {
-        this.setState({ nowHitKeywordListData });
-        localStorage.setItem(
-          "nowHitKeywordList",
-          JSON.stringify(nowHitKeywordListData)
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   savedSettings = () => {
     console.log("savedSettings");
-    let nowHitData = JSON.parse(
+    let nowHitisExistingVisitor = JSON.parse(
       localStorage.getItem("nowHitisExistingVisitor")
     );
-    if (!nowHitData) {
+
+    if (!nowHitisExistingVisitor) {
+      console.log("isNewVisit");
+
       return { page: "Settings", isFirstVisit: true };
     }
+
     return { page: "Research" };
   };
 

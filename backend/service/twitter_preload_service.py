@@ -223,7 +223,6 @@ def add_img_url(keyword_to_rank_agg):
 
     _search_params = {
         "num": 1,
-        'imgSize': 'MEDIUM',
     }
     gcs_search_keywords = list(keyword_to_rank_agg["data"].keys())
     for index, gcs_search_keyword in enumerate(gcs_search_keywords):

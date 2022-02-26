@@ -24,6 +24,7 @@ export const subtleBoxShadow = `box-shadow: 0px 0px 5px 1px ${
 }`;
 export const palevioletredBoxShadow = `box-shadow: 0px 0px 2px 2px palevioletred`;
 export const brightGlowBoxShadow = `box-shadow: 0px 0px 3px 1px #b4c2d4`;
+export const redBoxShadow = `box-shadow: 0px 0px 3px 1px #cd2c69`;
 
 export const fontSizeBig = "font-size: 2em";
 export const fontSize1 = "font-size: 1.25em;";

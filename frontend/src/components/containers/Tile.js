@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { redBoxShadow } from "../../styles/Variants";
+
 import {
   brightGlowBoxShadow,
   lightGreyBackground,
@@ -13,4 +15,13 @@ export const Tile = styled.div`
 export const SelectableTile = styled(
   Tile
 )`&:hover{cursor: pointer; ${brightGlowBoxShadow}}
+}`;
+
+export const DeletableTile = styled(
+  Tile
+)`&:hover{cursor: pointer; ${redBoxShadow}}
+}`;
+
+export const DisableTile = styled(Tile)`pointer-events: none;
+opacity: 0.4;
 }`;

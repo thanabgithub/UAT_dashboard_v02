@@ -11,7 +11,8 @@ const PageValidator = ({ name, children }) => {
         }
         return (
           <div>
-            <h1>{page}</h1> {children}
+            {/* <h1>{page}</h1> */}
+            {children}
           </div>
         );
       }}

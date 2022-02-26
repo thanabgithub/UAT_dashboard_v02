@@ -26,7 +26,7 @@ const ConfirmButton = () => {
       {({ handleConfirmFavorite }) => (
         <CenterDiv>
           <ConfirmButtonStyled onClick={handleConfirmFavorite}>
-            confirm favorite
+            confirm favorites
           </ConfirmButtonStyled>
         </CenterDiv>
       )}

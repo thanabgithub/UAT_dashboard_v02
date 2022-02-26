@@ -5,11 +5,10 @@ import { AppContext } from "../../contexts/AppContext";
 const DataPreValidator = (props) => {
   return (
     <AppContext.Consumer>
-      {({ nowHitKeywordListData }) => {
+      {({ nowHitTwitterAllKeywordsAllNationalRanks }) => {
         console.log("in DataPreValidator");
-        console.log(nowHitKeywordListData);
 
-        if (!nowHitKeywordListData) {
+        if (!nowHitTwitterAllKeywordsAllNationalRanks) {
           console.log("読み込み中");
 
           return (

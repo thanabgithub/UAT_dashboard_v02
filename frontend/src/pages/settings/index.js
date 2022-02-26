@@ -9,7 +9,7 @@ export default function Settings(props) {
   return (
     <PageController name="Settings">
       <WelcomeMessage />
-
+      <KeywordGrid topSection />
       <ConfirmFavoriteButton />
 
       <KeywordGrid />

@@ -2,30 +2,39 @@ import React from "react";
 import styled from "styled-components";
 import { AppContext } from "../../contexts/AppContext";
 import { fontFamilyReading } from "../../styles/Variants";
-import { SelectableTile } from "../../components/containers/Tile";
 
+import KeywordCardGrid from "./keywordCards/KeywordCardGrid";
 const KeywordGridStyled = styled.div`
   display: grid;
   color: white;
 
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   margin-top: 10px;
   padding: 0px;
   ${fontFamilyReading};
   grid-gap 15px
 `;
 
-function getKeywordsToDisplay(nowHitKeywordListData) {
-  return nowHitKeywordListData.keywordList.slice(0, 40);
+function getKeywordsToDisplay(
+  nowHitTwitterAllKeywordsAllNationalRanks,
+  topSection
+) {
+  return Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(
+    0,
+    topSection ? 4 : 20
+  );
 }
 
-const KeywordGrid = () => {
+const KeywordGrid = ({ topSection }) => {
   return (
     <AppContext.Consumer>
-      {({ nowHitKeywordListData }) => (
+      {({ nowHitTwitterAllKeywordsAllNationalRanks }) => (
         <KeywordGridStyled>
-          {getKeywordsToDisplay(nowHitKeywordListData).map((keyword) => (
-            <SelectableTile>{keyword}</SelectableTile>
+          {getKeywordsToDisplay(
+            nowHitTwitterAllKeywordsAllNationalRanks,
+            topSection
+          ).map((keyword) => (
+            <KeywordCardGrid keyword={keyword} topSection={topSection} />
           ))}
         </KeywordGridStyled>
       )}
