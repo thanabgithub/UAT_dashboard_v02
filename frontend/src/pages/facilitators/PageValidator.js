@@ -5,13 +5,13 @@ import { AppContext } from "../../contexts/AppContext";
 const PageValidator = ({ name, children }) => {
   return (
     <AppContext.Consumer>
-      {({ page }) => {
-        if (page !== name) {
+      {({ currentPage }) => {
+        if (currentPage !== name) {
           return null;
         }
         return (
           <div>
-            {/* <h1>{page}</h1> */}
+            {/* <h1>{currentPage}</h1> */}
             {children}
           </div>
         );

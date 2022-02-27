@@ -1,12 +1,14 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { AppContext } from "../../../contexts/AppContext";
+import RegionSelectButtons from "../../../pages/playground/filter/RegionSelectButtons";
 
 const Logo = styled.div`
   justify-self: self-start;
   font-size: 1.75em;
   font-weight: 900;
   color: palevioletred;
+  text-shadow: 1px 1px 2px #2c241c;
 `;
 // #fe9ea8
 const ControlButtonStyle = styled.div`
@@ -25,15 +27,15 @@ const ControlButtonStyle = styled.div`
 `;
 
 /* it consume information here and provide to App.js then it ends up provide
-      variable page to all buttons. */
+      variable currentPage to all buttons. */
 
 const ControlButton = ({ name, active }) => {
   return (
     <AppContext.Consumer>
-      {({ page, setPage }) => (
+      {({ currentPage, setCurrentPage }) => (
         <ControlButtonStyle
-          active={page === name}
-          onClick={() => setPage(name)}
+          active={currentPage === name}
+          onClick={() => setCurrentPage(name)}
         >
           {setProperCase(name)}
         </ControlButtonStyle>
@@ -47,19 +49,27 @@ const setProperCase = (lower) => {
 };
 
 const BarStyle = styled.div`
-  display: grid;
-  grid-template-columns: 7em auto 6em 6em;
+  display: flex;
   margin-bottom: 2em;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const MeanuLayout = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
 `;
 
 const AppBar = () => {
   return (
     <BarStyle>
       <Logo>NowHit</Logo>
-      <div />
-      <ControlButton name="Research" />
-      <ControlButton name="Settings" />
+      <MeanuLayout>
+        <ControlButton name="Monitor" />
+        <ControlButton name="Research" />
+        <ControlButton name="Playground" />
+      </MeanuLayout>
     </BarStyle>
   );
 };

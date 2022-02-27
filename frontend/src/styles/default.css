@@ -9,7 +9,7 @@ body {
 @-ms-viewport {
   width: device-width;
 }
-/* technique not tolet it move when it changes between page with scroll bar and not */
+/* technique not tolet it move when it changes between currentPage with scroll bar and not */
 html {
   overflow-y: scroll;
 }

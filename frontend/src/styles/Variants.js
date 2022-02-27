@@ -2,8 +2,6 @@ const theme = "dark";
 //const theme = 'light';
 export const lightTheme = theme === "light";
 
-// https://icolorpalette.com/download/palette/510060_color_palette.jpg
-
 export const color = lightTheme ? "white" : "#415671";
 export const color2 = lightTheme ? "white" : "#010e2c";
 export const color3 = lightTheme ? "#09f010" : "#42ff3a";
@@ -24,6 +22,7 @@ export const subtleBoxShadow = `box-shadow: 0px 0px 5px 1px ${
 }`;
 export const palevioletredBoxShadow = `box-shadow: 0px 0px 2px 2px palevioletred`;
 export const brightGlowBoxShadow = `box-shadow: 0px 0px 3px 1px #b4c2d4`;
+export const brightGlowBoxShadowThin = `box-shadow: 0px 0px 1px 1px #b4c2d4`;
 export const redBoxShadow = `box-shadow: 0px 0px 3px 1px #cd2c69`;
 
 export const fontSizeBig = "font-size: 2em";

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import "./styles/WebFontLoader";
-import Settings from "./pages/settings/index";
+import Playground from "./pages/playground/index";
 
 import AppLayout from "./components/containers/AppLayout";
 import AppBar from "./components/elements/appBar/AppBar";
@@ -16,7 +16,7 @@ class App extends Component {
           {/* the functionality of context provider is to restrict scope of context */}
           <AppBar />
           <DataPreValidator>
-            <Settings name="NowHit" />
+            <Playground name="NowHit" />
           </DataPreValidator>
         </AppProvider>
       </AppLayout>

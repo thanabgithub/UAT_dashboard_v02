@@ -30,12 +30,12 @@ def get_twitter_keyword_timeseries(keyword):
 
 @twitter_route.route("/twitter/national-ranks/keywords", methods=['GET'])
 def get_twitter_national_rank_data():
-    print('in route: /twitter/national-ranks/all')
+    print('in route: /twitter/national-ranks/keywords')
     return get_twitter_national_ranks_keywords_service()
 
-@twitter_route.route("/twitter/regional-ranks/all", methods=['GET'])
+@twitter_route.route("/twitter/regional-ranks/keywords", methods=['GET'])
 def get_twitter_regional_rank_data():
-    print('in route: /twitter/regional-ranks/all')
+    print('in route: /twitter/regional-ranks/keywords')
     return get_twitter_regional_ranks_keywords_service()
 
 # @twitter_route.route("/twitter/keywords/all/regions/all/ranks/all", methods=['GET'])
