@@ -7,7 +7,7 @@ export const AppContext = React.createContext();
 export const MAX_FAVORITES = 50;
 
 const TWITTER_REGIONAL_RANKS_URL =
-  "http://192.168.1.33:5050/twitter/regional-ranks/keywords";
+  "https://thana-b-5d3s3t45341axzdm.socketxp.com/twitter/regional-ranks/keywords";
 
 const MAX_AGE_DATA_GRID = 5 * 60;
 // 5 mins
