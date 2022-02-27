@@ -2,8 +2,9 @@ import React from "react";
 import RegionSelectButtons from "./filter/RegionSelectButtons";
 import styled from "styled-components";
 import PageValidator from "../facilitators/PageValidator";
+import DataPreValidator from "../facilitators/DataPreValidator";
 
-// import KeywordGrid from "./KeywordGrid";
+import KeywordGrid from "./KeywordGrid";
 
 const RegionButtonPanel = styled.div``;
 
@@ -21,6 +22,7 @@ const Playground = (props) => {
       <RegionButtonPanel>
         <RegionSelectButtons />
       </RegionButtonPanel>
+      <KeywordGrid />
     </PageValidator>
   );
 };

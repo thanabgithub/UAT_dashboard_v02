@@ -8,9 +8,11 @@ import {
 
 export const Tile = styled.div`
   ${lightGreyBackground};
-  padding: 0.5em;
+  padding: 0.25em;
   border-radius: 0.25em;
   height: 10em;
+  display: d-flex;
+  justify-content: space-between;
 `;
 
 export const SelectableTile = styled(

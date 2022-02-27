@@ -5,22 +5,22 @@ import { DeletableTile } from "../../../components/containers/Tile";
 export const KeyboardCardHeaderStyled = styled.div`
   display: grid;
   grid-template-columns: auto 0.25fr;
-  margin-bottom: 0.5em;
-  height: 2em;
+  margin-bottom: 0.25em;
+  height: 1em;
 `;
 
-export const KeywordLayout = styled.div`
+export const RegionLayout = styled.div`
   justify-self: self-start;
-  font-size: 0.75em;
+  font-size: 0.5em;
   font-weight: 900;
-  width: 90%;
 `;
 // export const fontSize2 = "font-size: 0.75em";
 // export const fontSize3 = "font-size: .50em";
 
 export const RankLayout = styled.div`
-  justify-self: self-end;
-  font-size: 0.75em;
+  display: d-flex;
+  justify-self: right;
+  font-size: 1em;
 `;
 
 const DeleteIcon = styled(RankLayout)`
@@ -30,17 +30,19 @@ const DeleteIcon = styled(RankLayout)`
     color: #921f4b;
   }
 `;
-
-const KeywordCardHeader = ({ keyword, rank, topSection }) => {
+export const KeywordStyle = styled.div`
+  font-size: 0.75em;
+  font-weight: 900;
+`;
+const KeywordCardHeader = ({ keyword, rank, region }) => {
   return (
-    <KeyboardCardHeaderStyled>
-      <KeywordLayout>{keyword}</KeywordLayout>
-      {topSection ? (
-        <DeleteIcon> X </DeleteIcon>
-      ) : (
+    <div>
+      <KeywordStyle>{keyword}</KeywordStyle>
+      <KeyboardCardHeaderStyled>
+        <RegionLayout>{region}</RegionLayout>
         <RankLayout>{rank}</RankLayout>
-      )}
-    </KeyboardCardHeaderStyled>
+      </KeyboardCardHeaderStyled>
+    </div>
   );
 };
 

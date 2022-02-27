@@ -13,60 +13,46 @@ const ImgStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 0.5em;
+  height: 7em;
+  width: 100%;
+`;
+
+// function clickKeywordHandler(topSection, keyword, addKeyword, removeKeyword) {
+//   return topSection
+//     ? () => {
+//         removeKeyword(keyword);
+//       }
+//     : () => {
+//         addKeyword(keyword);
+//       };
+// }
+
+const Layout = styled.div`
+  display: d-flex;
+
+  justify-content: space-between;
   height: 6em;
 `;
 
-function clickKeywordHandler(topSection, keyword, addKeyword, removeKeyword) {
-  return topSection
-    ? () => {
-        removeKeyword(keyword);
-      }
-    : () => {
-        addKeyword(keyword);
-      };
-}
-
-const KeywordCardGrid = ({
-  keyword,
-  topSection,
-  addKeyword,
-  removeKeyword,
-}) => {
+const KeywordCardGrid = ({ index }) => {
   return (
     <AppContext.Consumer>
-      {({
-        nowHitTwitterAllKeywordsAllNationalRanks,
-        addKeyword,
-        removeKeyword,
-        isInFavorites,
-      }) => {
-        let keywordItems =
-          nowHitTwitterAllKeywordsAllNationalRanks.data[keyword];
-        let rank = keywordItems.rank;
+      {({ pgObjectShow }) => {
         let TileClass = SelectableTile;
-        if (topSection) {
-          TileClass = DeletableTile;
-        } else if (isInFavorites(keyword)) {
-          //TileClass = DisableTile;
-          return;
-        }
         return (
-          <TileClass
-            onClick={clickKeywordHandler(
-              topSection,
-              keyword,
-              addKeyword,
-              removeKeyword
-            )}
-          >
-            <KeywordCardHeader
-              topSection={topSection}
-              keyword={keyword}
-              rank={rank}
-            />
-            <ImgStyle>
-              <KeywordImage keyword={keyword} keywordItems={keywordItems} />
-            </ImgStyle>
+          <TileClass>
+            <Layout>
+              <KeywordCardHeader
+                keyword={pgObjectShow[index].keyword}
+                rank={pgObjectShow[index].rank}
+                region={pgObjectShow[index].region}
+              />
+
+              <ImgStyle>
+                <KeywordImage object={pgObjectShow[index]} />
+              </ImgStyle>
+            </Layout>
           </TileClass>
         );
       }}

@@ -16,6 +16,7 @@ class App extends Component {
           {/* the functionality of context provider is to restrict scope of context */}
           <AppBar />
           <DataPreValidator>
+            {" "}
             <Playground name="NowHit" />
           </DataPreValidator>
         </AppProvider>

@@ -8,38 +8,30 @@ const KeywordGridStyled = styled.div`
   display: grid;
   color: white;
 
-  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(6em, 1fr));
   margin-top: 10px;
   padding: 0px;
   ${fontFamilyReading};
   grid-gap 15px
 `;
 
-function getKeywordsToDisplay(
-  nowHitTwitterAllKeywordsAllNationalRanks,
-  topSection,
-  favorites
-) {
-  return topSection
-    ? favorites
-    : Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(0, 48);
-}
+// function getKeywordsToDisplay(
+//   pgObject,
+//   topSection,
+//   favorites
+// ) {
+//   return topSection
+//     ? favorites
+//     : Object.keys(nowHitTwitterAllKeywordsAllNationalRanks.data).slice(0, 48);
+// }
 
-const KeywordGrid = ({ topSection }) => {
+const KeywordGrid = () => {
   return (
     <AppContext.Consumer>
-      {({ nowHitTwitterAllKeywordsAllNationalRanks, favorites }) => (
+      {({ pgObjectShow }) => (
         <KeywordGridStyled>
-          {getKeywordsToDisplay(
-            nowHitTwitterAllKeywordsAllNationalRanks,
-            topSection,
-            favorites
-          ).map((keyword) => (
-            <KeywordCardGrid
-              key={keyword}
-              keyword={keyword}
-              topSection={topSection}
-            />
+          {Object.keys(pgObjectShow).map((index) => (
+            <KeywordCardGrid key={index} index={index} />
           ))}
         </KeywordGridStyled>
       )}

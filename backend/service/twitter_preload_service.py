@@ -228,23 +228,23 @@ def prepare_meta_n_dump(regional_df, national_df):
 #         national_trends = national_trends.union(regional_trends)
 #     return wip_woeid_trends_df, national_trends, as_of
 
-# def get_woeid_trends():
-#     """
-#     get raw JSON format data from twitter
-#     """
-#     available_data_to_woeid = pd.read_excel(
-#         "./data/ELT_JP_WOEID.xlsx", index_col="Area"
-#     ).astype("string")
-#     available_data_to_woeid = available_data_to_woeid.to_dict("dict")["WOEID"]
+def get_woeid_trends():
+    """
+    get raw JSON format data from twitter
+    """
+    available_data_to_woeid = pd.read_excel(
+        "./data/ELT_JP_WOEID.xlsx", index_col="Area"
+    ).astype("string")
+    available_data_to_woeid = available_data_to_woeid.to_dict("dict")["WOEID"]
 
-#     woeid_trends = {}
+    woeid_trends = {}
 
-#     for area, woeid_str in available_data_to_woeid.items():
-#         print(area + ": " + woeid_str)
-#         json_response = get_trends(woeid_str)
-#         woeid_trends[area] = json_response
+    for area, woeid_str in available_data_to_woeid.items():
+        print(area + ": " + woeid_str)
+        json_response = get_trends(woeid_str)
+        woeid_trends[area] = json_response
 
-#     return woeid_trends
+    return woeid_trends
 
 
 def prepare_meta_data():

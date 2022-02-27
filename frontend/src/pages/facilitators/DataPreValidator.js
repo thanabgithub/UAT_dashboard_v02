@@ -5,10 +5,12 @@ import { AppContext } from "../../contexts/AppContext";
 const DataPreValidator = (props) => {
   return (
     <AppContext.Consumer>
-      {({ pdObject }) => {
+      {({ pgObject, uniqueRegion }) => {
         console.log("in DataPreValidator");
-
-        if (!pdObject) {
+        let hasData = Object.keys(pgObject).length > 0;
+        console.log("Object.keys(pgObject): " + Object.keys(pgObject));
+        console.log("hasData: " + hasData);
+        if (!pgObject || !hasData || !uniqueRegion) {
           console.log("読み込み中");
 
           return (

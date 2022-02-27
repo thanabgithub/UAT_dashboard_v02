@@ -33,23 +33,37 @@ export const RegionTile = styled.div`
 /* it consume information here and provide to App.js then it ends up provide
       variable currentPage to all buttons. */
 
-const handleWrapper = (handleRegionSelect, e, region, isInUnshowns) => {
+const handleWrapper = (
+  handleRegionSelect,
+  e,
+  region,
+  isInUnshowns,
+  UnshownRegionsStatus
+) => {
   e.preventDefault();
   let res = isInUnshowns(region);
+  console.log("UnshownRegionsStatus!!!!!!!!!!!!!!!!!!!!!");
+  console.log(UnshownRegionsStatus);
   if (res) {
     console.log("handleWrapper " + region + res);
   }
   return handleRegionSelect(region);
 };
 
-const ControlButton = ({ region, isInUnshowns }) => {
+const ControlButton = ({ region, isInUnshowns, UnshownRegionsStatus }) => {
   return (
     <AppContext.Consumer>
       {({ handleRegionSelect, isInUnshowns }) => (
         <RegionTile
           active={isInUnshowns(region)}
           onClick={(e) =>
-            handleWrapper(handleRegionSelect, e, region, isInUnshowns)
+            handleWrapper(
+              handleRegionSelect,
+              e,
+              region,
+              isInUnshowns,
+              UnshownRegionsStatus
+            )
           }
         >
           {region}
@@ -72,22 +86,15 @@ const RegionButtonGrid = styled.div`
 
 const RegionSelectButtons = () => {
   return (
-    <RegionButtonGrid>
-      <ControlButton region="沖縄" />
-      <ControlButton region="東京" />
-      <ControlButton region="福岡" />
-      <ControlButton region="広島" />
-
-      <ControlButton region="神戸" />
-      <ControlButton region="京都" />
-      <ControlButton region="大阪" />
-      <ControlButton region="名古屋" />
-      <ControlButton region="高松" />
-
-      <ControlButton region="浜松" />
-      <ControlButton region="仙台" />
-      <ControlButton region="札幌" />
-    </RegionButtonGrid>
+    <AppContext.Consumer>
+      {({ uniqueRegion }) => (
+        <RegionButtonGrid>
+          {uniqueRegion.map((element, key) => (
+            <ControlButton region={element} />
+          ))}
+        </RegionButtonGrid>
+      )}
+    </AppContext.Consumer>
   );
 };
 
