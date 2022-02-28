@@ -5,14 +5,15 @@ import pandas as pd
 import requests
 import os
 from datetime import datetime
-from dotenv import load_dotenv
+
 import requests_cache
 import json
 
-load_dotenv()
-bearer_token = os.environ.get("BEARER_TOKEN")
-gcs_developer_key = os.environ.get("GCS_DEVELOPER_KEY")
-gcs_CX = os.environ.get("GCS_CX")
+from config.config import Config
+bearer_token = Config.BEARER_TOKEN
+
+gcs_developer_key = Config.GCS_DEVELOPER_KEY
+gcs_CX = Config.GCS_CX
 
 expire_after_param = 6 * 60 * 60
 # 6 hours
@@ -37,6 +38,9 @@ def get_trends(url):
         """
         Method required by bearer token authentication.
         """
+        bearer_token = os.environ.get("BEARER_TOKEN")
+        print("bearer_token")
+        print(bearer_token)
         r.headers["Authorization"] = f"Bearer {bearer_token}"
         return r
 
@@ -60,6 +64,7 @@ def get_woeid_trends():
     available_data_to_woeid = pd.read_excel(
         "./data/ELT_JP_WOEID.xlsx", index_col="Area"
     ).astype("string")
+    bearer_token = os.environ.get("BEARER_TOKEN")
     available_data_to_woeid = available_data_to_woeid.to_dict("dict")["WOEID"]
 
     woeid_trends = {}
@@ -113,6 +118,9 @@ def prepare_url(regional_df, national_df):
     """
         prepare url
     """
+    gcs_developer_key = os.environ.get("GCS_DEVELOPER_KEY")
+    gcs_CX = os.environ.get("GCS_CX")
+
     keyword_national_set = set(national_df.keyword)
     keyword_regional_set = set(regional_df.keyword)
 

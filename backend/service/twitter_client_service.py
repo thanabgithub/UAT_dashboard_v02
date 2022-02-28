@@ -1,25 +1,29 @@
 # %%
 from datetime import datetime
-from dotenv import load_dotenv
+
 import os
 import requests
 import requests_cache
 import pandas as pd
 import numpy as np
 from service.analysis_toolbox import indicators
+from service.twitter_preload_service import prepare_meta_data
 import json
 # %%
-
-load_dotenv()
-bearer_token = os.environ.get("BEARER_TOKEN")
+from config.config import Config
+bearer_token = Config.BEARER_TOKEN
 
 print(bearer_token)
 
 # %%
-expire_after_param = 30*60; # 30 minutes
+expire_after_param = 5*60; # 5 minutes
 requests_cache.install_cache(
     'data/twitter_service_cache', backend='sqlite', expire_after=expire_after_param)
 
+def bearer_oauth(r):
+    print(bearer_token)
+    r.headers["Authorization"] = f"Bearer {bearer_token}"
+    return r
 
 
 
@@ -35,9 +39,6 @@ def get_count_keyword_7_days(keyword: str):
 
     """
 
-    def bearer_oauth(r):
-        r.headers["Authorization"] = f"Bearer {bearer_token}"
-        return r
 
     def connect_to_endpoint(url, params):
         response = requests.get(url, auth=bearer_oauth, params=params)
@@ -57,13 +58,8 @@ def get_twitter_keyword_timeseries_service(keyword):
     requestDatetime = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
     requestTimestampMillisec = datetime.timestamp(time_now_dt) * 1000
     requestId = hex(int(requestTimestampMillisec * 1000))
+    meta = prepare_meta_data()  
 
-    meta = {
-        "requestDatetime": requestDatetime,
-        "requestTimestampMillisec": requestTimestampMillisec,
-        "requestId": requestId,
-        "comment": 'cache/real-time'
-    }
     
     try:
         json_response = get_count_keyword_7_days(keyword)
@@ -85,6 +81,9 @@ def get_twitter_keyword_timeseries_service(keyword):
         print(df_sm_.T.values[0][0])
         print(df_sm_.T.values[0][-2])
         print(type(df_chg_7))
+        
+        
+        
         res = {
             "data": {
                 keyword: { 
