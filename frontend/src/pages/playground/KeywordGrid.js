@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { AppContext } from "../../contexts/AppContext";
 import { fontFamilyReading } from "../../styles/Variants";
 
@@ -8,11 +8,12 @@ const KeywordGridStyled = styled.div`
   display: grid;
   color: white;
 
-  grid-template-columns: repeat(auto-fill, minmax(6em, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
   margin-top: 10px;
-  padding: 0px;
+  padding: 0.0em;
   ${fontFamilyReading};
-  grid-gap 15px
+  grid-gap 0.25em;
+
 `;
 
 // function getKeywordsToDisplay(

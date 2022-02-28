@@ -7,7 +7,7 @@ const Logo = styled.div`
   justify-self: self-start;
   font-size: 1.75em;
   font-weight: 900;
-  color: palevioletred;
+  color: #f95335;
   text-shadow: 1px 1px 2px #2c241c;
 `;
 // #fe9ea8
@@ -15,13 +15,14 @@ const ControlButtonStyle = styled.div`
   cursor: pointer;
   padding-right: 0.75em;
   font-size: 0.75em;
-  color: palevioletred;
+  color: #f95335;
+  font-weight: 900;
   display: flex;
   justify-self: self-end;
   ${(props) =>
     props.active &&
     css`
-      color: white;
+      color: #50a3a4;
       text-shadow: #fc0 0px 0px 1px 1px;
     `}
 `;

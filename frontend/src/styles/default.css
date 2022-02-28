@@ -1,10 +1,11 @@
+/* 
+https://www.pinterest.com/pin/600456562798957455/ */
 body {
-  background-color: #212529;
-  color: white;
+  background-color: #f7f6f4;
+  color: #674a40;
   font-family: "Orbitron", sans-serif;
   letter-spacing: 0.075em;
   padding: 1em;
-  overflow-block: hidden;
 }
 @-ms-viewport {
   width: device-width;

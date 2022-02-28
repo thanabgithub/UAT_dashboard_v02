@@ -4,7 +4,7 @@ const KeywordImage = ({ object, style }) => {
   return (
     <img
       alt={object.keyword}
-      style={style || { maxHeight: "100%", maxWidth: "5.5em" }}
+      style={style || { maxHeight: "80%", maxWidth: "80%" }}
       src={object.imgURL}
     />
   );

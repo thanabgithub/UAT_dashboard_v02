@@ -118,7 +118,6 @@ def prepare_url(regional_df, national_df):
 
     keywords = keyword_national_set.union(keyword_regional_set)
 
-    # %%
     from google_images_search import GoogleImagesSearch
 
     gis = GoogleImagesSearch(gcs_developer_key, gcs_CX)
@@ -126,7 +125,6 @@ def prepare_url(regional_df, national_df):
 
     _search_params = {
         "num": 1,
-        'imgType': 'face'
     }
 
     for index, gcs_search_keyword in enumerate(keywords):
@@ -138,18 +136,15 @@ def prepare_url(regional_df, national_df):
         for image in gis.results():
             img_url = image.url
             keyword_to_image[gcs_search_keyword] = img_url
-            
-    # %%
+   
     national_df.reset_index(drop = True, inplace = True)
     regional_df.reset_index(drop = True, inplace = True)
 
     national_df['imgURL'] = ''
     regional_df['imgURL'] = ''
-    # %%
     for keyword in keyword_national_set:
         national_df['imgURL'][national_df.keyword == keyword]  = keyword_to_image[keyword]
-        
-    # %%
+     
     for keyword in keyword_regional_set:
         regional_df['imgURL'][regional_df.keyword==keyword] = keyword_to_image[keyword]
 
@@ -158,27 +153,27 @@ def prepare_url(regional_df, national_df):
     regional_df.reset_index(inplace = True)  
     
     return regional_df, national_df
-# %%
+
+
 def prepare_meta_n_dump(regional_df, national_df):
     """
         prepare meta data and dump
     """
 
 
-    national_df_json_data = {'data': {}}
+    national_df_json_data = {'data': {}, 'meta': {}}
 
     for col in national_df.columns:
         national_df_json_data['data'][col] = national_df[col].values.tolist()
 
-    # %%
-    regional_df_json_data = {'data': {}}
+    regional_df_json_data = {'data': {}, 'meta': {}}
     for col in regional_df.columns:
         regional_df_json_data['data'][col] = regional_df[col].values.tolist()
         
     meta = prepare_meta_data()
 
-    regional_df_json_data['data']['preloadMeta'] = meta
-    national_df_json_data['data']['preloadMeta'] = meta
+    regional_df_json_data['meta']['preloadMeta'] = meta
+    national_df_json_data['meta']['preloadMeta'] = meta
 
     def save_dict_as_json(data: dict, name: str, path="data/preloadJSON/"):
 

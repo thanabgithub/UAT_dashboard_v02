@@ -5,9 +5,10 @@ import _ from "lodash";
 
 export const AppContext = React.createContext();
 export const MAX_FAVORITES = 50;
-
+//https://thana-b-5d3s3t45341axzdm.socketxp.com//twitter/regional-ranks/keywords
+//http://10.10.100.1:5050//twitter/regional-ranks/keywords
 const TWITTER_REGIONAL_RANKS_URL =
-  "https://thana-b-5d3s3t45341axzdm.socketxp.com/twitter/regional-ranks/keywords";
+  "http://10.10.100.1:5050//twitter/regional-ranks/keywords";
 
 const MAX_AGE_DATA_GRID = 5 * 60;
 // 5 mins
@@ -39,7 +40,7 @@ export class AppProvider extends React.Component {
     let interestList = keys.filter(
       (key) => UnshownRegionsStatus[key] === false
     );
-    console.log(interestList);
+
     let extractData = this.state.trrData;
     console.log(extractData.data);
     let data = extractData.data;
@@ -49,7 +50,8 @@ export class AppProvider extends React.Component {
     let rank = data.rank;
     let imgURL = data.imgURL;
 
-    let indexMem = [];
+    console.log("extractData");
+    console.log(extractData);
 
     region.forEach((e_region, i_region) => {
       region[i_region] = e_region.normalize("NFD");
@@ -69,49 +71,22 @@ export class AppProvider extends React.Component {
         interestIndex.push(index);
       }
     });
-    console.log(interestIndex);
-    console.log(rank[interestIndex]);
-    console.log(rank);
 
     index = index.filter((element, index) => interestIndex.includes(index));
     region = region.filter((element, index) => interestIndex.includes(index));
     keyword = keyword.filter((element, index) => interestIndex.includes(index));
     rank = rank.filter((element, index) => interestIndex.includes(index));
     imgURL = imgURL.filter((element, index) => interestIndex.includes(index));
-    console.log(index);
-    console.log(region);
-    console.log(keyword);
-    console.log(rank);
-    console.log(imgURL);
 
-    const assembleArrayFilter = (index, keyword, rank, region, imgURL) =>
-      Object.fromEntries(
-        index.map((element, index, newObject) => [
-          index,
-
-          Object.fromEntries(
-            new Map([
-              ["keyword", keyword[element]],
-              ["rank", rank[element]],
-              ["region", region[element]],
-              ["imgURL", imgURL[element]],
-            ])
-          ),
-        ])
-      );
-
-    let pgObjectShow = assembleArrayFilter(
+    let pgObjectShow = this.assembleArrayFilter(
       index,
       keyword,
       rank,
       region,
       imgURL
     );
+
     this.setState({ pgObjectShow });
-    console.log("this.state.pgObject");
-    console.log(this.state.pgObject);
-    console.log("pgObjectShow");
-    console.log(pgObjectShow);
   };
 
   initUnshownRegionsStatus = () => {
@@ -125,10 +100,7 @@ export class AppProvider extends React.Component {
     let createdObject = Object.fromEntries(
       uniqueRegion.map((element, index) => [element, false])
     );
-    console.log("createdObject: " + createdObject);
-    console.log(
-      "createdObject[uniqueRegion[0]]: " + createdObject[uniqueRegion[0]]
-    );
+
     let UnshownRegionsStatus = createdObject;
     this.setState({ UnshownRegionsStatus });
     this.setState({ uniqueRegion });
@@ -136,19 +108,43 @@ export class AppProvider extends React.Component {
   isInUnshowns = (region) => {
     let UnshownRegionsStatus = this.state.UnshownRegionsStatus;
 
-    if (UnshownRegionsStatus[region]) {
-      console.log(region);
-      console.log(UnshownRegionsStatus[region]);
-    }
     let active = UnshownRegionsStatus[region];
     return active;
   };
 
   handleRegionSelect = async (region) => {
-    let UnshownRegionsStatus = this.state.UnshownRegionsStatus;
-    UnshownRegionsStatus[region] = !UnshownRegionsStatus[region];
-    console.log(region);
-    // console.log(UnshownRegionsStatus);
+    let UnshownRegionsStatus_before = this.state.UnshownRegionsStatus;
+
+    let UnshownRegionsStatus = UnshownRegionsStatus_before;
+    let countUnshown = 0;
+    Object.keys(UnshownRegionsStatus_before).forEach((element, key) => {
+      if (UnshownRegionsStatus_before[element]) {
+        countUnshown = countUnshown + 1;
+      }
+    });
+
+    if (countUnshown === 0) {
+      Object.keys(UnshownRegionsStatus).forEach((element, key) => {
+        UnshownRegionsStatus[element] = true;
+      });
+
+      UnshownRegionsStatus[region] = false;
+    }
+
+    if (countUnshown == 11 && UnshownRegionsStatus_before[region] == false) {
+      Object.keys(UnshownRegionsStatus).forEach((element, key) => {
+        UnshownRegionsStatus[element] = false;
+      });
+    }
+
+    if (countUnshown > 0 && UnshownRegionsStatus_before[region] == true) {
+      Object.keys(UnshownRegionsStatus).forEach((element, key) => {
+        UnshownRegionsStatus[element] = true;
+      });
+      UnshownRegionsStatus_before[region] =
+        !UnshownRegionsStatus_before[region];
+    }
+
     this.setState({ UnshownRegionsStatus });
     this.filterPgObject();
   };
@@ -157,12 +153,9 @@ export class AppProvider extends React.Component {
   initPgObjectShow = () => {
     let pgObjectShow = this.state.pgObject;
     this.setState({ pgObjectShow });
-    console.log("in initPgObjectShow");
-    console.log(pgObjectShow);
   };
 
   componentDidMount = () => {
-    console.log("in componentDidMount ");
     this.dataLoadController();
   };
   ///////////////////////////
@@ -175,9 +168,23 @@ export class AppProvider extends React.Component {
       JSON.stringify(this.state.currentPage)
     );
   };
+  assembleArrayFilter = (index, keyword, rank, region, imgURL) =>
+    Object.fromEntries(
+      index.map((element, index, newObject) => [
+        index,
+
+        Object.fromEntries(
+          new Map([
+            ["keyword", keyword[index]],
+            ["rank", rank[index]],
+            ["region", region[index]],
+            ["imgURL", imgURL[index]],
+          ])
+        ),
+      ])
+    );
 
   fetchTrrDataAsRequired = () => {
-    console.log("in fetchTrrDataAsRequired ");
     let extractData = JSON.parse(localStorage.getItem("nowHitTrrData"));
     let refreshTrrData = true;
     if (extractData) {
@@ -197,9 +204,6 @@ export class AppProvider extends React.Component {
     console.log("start setpgObject !");
 
     let extractData = this.state.trrData;
-    console.log(Object.keys(extractData).length);
-
-    console.log(extractData);
 
     let data = extractData.data;
     let index = data.index;
@@ -208,23 +212,13 @@ export class AppProvider extends React.Component {
     let rank = data.rank;
     let imgURL = data.imgURL;
 
-    const assembleArray = (index, keyword, rank, region, imgURL) =>
-      Object.fromEntries(
-        index.map((element, index, newObject) => [
-          index,
-
-          Object.fromEntries(
-            new Map([
-              ["keyword", keyword[element]],
-              ["rank", rank[element]],
-              ["region", region[element]],
-              ["imgURL", imgURL[element]],
-            ])
-          ),
-        ])
-      );
-
-    let pgObject = assembleArray(index, keyword, rank, region, imgURL);
+    let pgObject = this.assembleArrayFilter(
+      index,
+      keyword,
+      rank,
+      region,
+      imgURL
+    );
     const report = (display) => console.log(display);
     this.setState({ pgObject });
     report(pgObject);
@@ -240,8 +234,6 @@ export class AppProvider extends React.Component {
 
         let trrData = extractData;
         this.setState({ trrData });
-
-        console.log("API res: " + trrData);
       })
       .catch((err) => {
         console.log(err);
@@ -260,10 +252,19 @@ export class AppProvider extends React.Component {
     if (!extractData) {
       let trrData = extractData;
       await this.fetchTwRegionalRanksAPI().then(() => {
-        this.setpgObject();
+        trrData = this.setpgObject();
         localStorage.setItem("nowHitTrrData", JSON.stringify(trrData));
       });
+    } else {
+      let timestamp = extractData.meta.requestTimestampMillisec;
+      let now = Date.now();
+      let fromLastRequest = now - timestamp;
+
+      if (fromLastRequest < MAX_AGE_DATA_GRID) {
+        this.fetchTwRegionalRanksAPI();
+      }
     }
+
     this.setpgObject();
     this.initPgObjectShow();
     this.initUnshownRegionsStatus();
@@ -276,8 +277,6 @@ export class AppProvider extends React.Component {
   };
 
   setCurrentPage = (currentPage) => {
-    console.log("in setCurrentPage");
-    console.log(currentPage);
     this.setState({ currentPage });
   };
 

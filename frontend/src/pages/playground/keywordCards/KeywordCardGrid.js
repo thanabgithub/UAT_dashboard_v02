@@ -11,11 +11,9 @@ import styled from "styled-components";
 
 const ImgStyle = styled.div`
   display: flex;
-  align-items: center;
+  align-content: center;
   justify-content: center;
-  margin-top: 0.5em;
-  height: 7em;
-  width: 100%;
+  align-self: stretch;
 `;
 
 // function clickKeywordHandler(topSection, keyword, addKeyword, removeKeyword) {
@@ -30,9 +28,10 @@ const ImgStyle = styled.div`
 
 const Layout = styled.div`
   display: d-flex;
+  padding: 0.25em;
 
-  justify-content: space-between;
-  height: 6em;
+  justify-content: stretch;
+  align-content: stretch;
 `;
 
 const KeywordCardGrid = ({ index }) => {

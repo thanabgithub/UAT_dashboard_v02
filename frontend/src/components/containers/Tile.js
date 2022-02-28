@@ -7,12 +7,9 @@ import {
 } from "../../styles/Variants";
 
 export const Tile = styled.div`
-  ${lightGreyBackground};
-  padding: 0.25em;
+  background-color: #674a40;
+
   border-radius: 0.25em;
-  height: 10em;
-  display: d-flex;
-  justify-content: space-between;
 `;
 
 export const SelectableTile = styled(

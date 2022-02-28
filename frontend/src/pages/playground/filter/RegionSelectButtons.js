@@ -6,7 +6,7 @@ import { fontFamilyReading, fontSize2 } from "../../../styles/Variants";
 import { brightGlowBoxShadowThin } from "../../../styles/Variants";
 export const RegionTile = styled.div`
 
-  background-color: #ea9ebb;
+  background-color: #FCAF38;
   color: #3f3647;
   font-weight: 600;
   padding-top: 0.25em;
@@ -90,7 +90,7 @@ const RegionSelectButtons = () => {
       {({ uniqueRegion }) => (
         <RegionButtonGrid>
           {uniqueRegion.map((element, key) => (
-            <ControlButton region={element} />
+            <ControlButton key={key} region={element} />
           ))}
         </RegionButtonGrid>
       )}
