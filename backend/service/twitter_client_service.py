@@ -58,8 +58,13 @@ def get_twitter_keyword_timeseries_service(keyword):
     requestDatetime = time_now_dt.strftime("%Y-%m-%d %H:%M:%S")
     requestTimestampMillisec = datetime.timestamp(time_now_dt) * 1000
     requestId = hex(int(requestTimestampMillisec * 1000))
-    meta = prepare_meta_data()  
 
+    meta = {
+        "requestDatetime": requestDatetime,
+        "requestTimestampMillisec": requestTimestampMillisec,
+        "requestId": requestId,
+        "comment": 'cache/real-time'
+    }
     
     try:
         json_response = get_count_keyword_7_days(keyword)
@@ -112,7 +117,6 @@ def get_twitter_keyword_timeseries_service(keyword):
             "status": "fail",
             "meta": meta
         }
-        
 
         return res
 

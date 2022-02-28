@@ -52,6 +52,10 @@ class Monitor extends React.Component {
       <PageValidator name={this.props.name}>
         <PageTitle>{this.props.name}</PageTitle>
         <PageDescription>{this.state.word}</PageDescription>{" "}
+        {/* <ChartCard
+          timeSeriesData={timeSeriesData}
+          deleteTimeSeriesData={handleDeleteTimeSeriesData}
+        /> */}
       </PageValidator>
     );
   }

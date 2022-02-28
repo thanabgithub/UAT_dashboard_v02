@@ -1,6 +1,7 @@
 import React from "react";
 import { AppContext } from "../../../contexts/AppContext";
 import {
+  Tile,
   SelectableTile,
   DeletableTile,
   DisableTile,
@@ -38,7 +39,7 @@ const KeywordCardGrid = ({ index }) => {
   return (
     <AppContext.Consumer>
       {({ pgObjectShow }) => {
-        let TileClass = SelectableTile;
+        let TileClass = Tile;
         return (
           <TileClass>
             <Layout>

@@ -5,13 +5,19 @@ import _ from "lodash";
 
 export const AppContext = React.createContext();
 export const MAX_FAVORITES = 50;
-//https://thana-b-5d3s3t45341axzdm.socketxp.com//twitter/regional-ranks/keywords
+// https://thana-b-5d3s3t45341axzdm.socketxp.com/twitter/regional-ranks/keywords
 //http://10.10.100.1:5050//twitter/regional-ranks/keywords
 const TWITTER_REGIONAL_RANKS_URL =
-  "http://10.10.100.1:5050//twitter/regional-ranks/keywords";
+  "https://thana-b-5d3s3t45341axzdm.socketxp.com/twitter/regional-ranks/keywords";
 
 const MAX_AGE_DATA_GRID = 5 * 60;
 // 5 mins
+const TWITTER_NATIONAL_RANKS_URL =
+  "http://10.10.100.1:5050/twitter/national-ranks/keywords";
+const TWITTER_TIMSERIES_URL = [
+  "http://10.10.100.1:5050/twitter/keywords/",
+  "/time-series",
+];
 
 const PAGES_NAME = ["Monitor", "Research", "Playground"];
 
@@ -133,13 +139,13 @@ export class AppProvider extends React.Component {
       UnshownRegionsStatus[region] = false;
     }
 
-    if (countUnshown == 11 && UnshownRegionsStatus_before[region] == false) {
+    if (countUnshown === 11 && UnshownRegionsStatus_before[region] === false) {
       Object.keys(UnshownRegionsStatus).forEach((element, key) => {
         UnshownRegionsStatus[element] = false;
       });
     }
 
-    if (countUnshown > 0 && UnshownRegionsStatus_before[region] == true) {
+    if (countUnshown > 0 && UnshownRegionsStatus_before[region] === true) {
       Object.keys(UnshownRegionsStatus).forEach((element, key) => {
         UnshownRegionsStatus[element] = true;
       });
@@ -152,6 +158,53 @@ export class AppProvider extends React.Component {
   };
   ///////////////////////////
 
+  fetchTimeSeriesData = async (keyword) => {
+    const requestURL =
+      TWITTER_TIMSERIES_URL[0] + keyword + TWITTER_TIMSERIES_URL[1];
+    console.log("requestURL");
+    console.log(requestURL);
+    console.log(keyword);
+    keyword = keyword.replace("#", "");
+    console.log(keyword);
+    await fetch(requestURL)
+      .then((res) => res.json())
+      .then((data) => {
+        data.data[keyword].rawCount.forEach(function (point) {
+          point[0] = Date.parse(point[0]) + 9 * 60 * 60 * 1000;
+        });
+        data.data[keyword].smoothCount.forEach(function (point) {
+          point[0] = Date.parse(point[0]) + 9 * 60 * 60 * 1000;
+        });
+        if (data.status === "success") {
+          console.log(data.id);
+          console.log("timeseries");
+          console.log(data);
+          return data;
+        } else console.log("invalid request");
+        //console.log(timeSeriesDataset);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  fetchTwNationalRanksAPI = async () => {
+    console.log("in fetchTwNationalRanksAPI");
+    await fetch(TWITTER_NATIONAL_RANKS_URL)
+      .then((res) => res.json())
+      .then((extractData) => {
+        console.log(extractData);
+
+        let tnrData = extractData;
+        console.log("tnrData");
+        console.log(tnrData);
+        this.setState({ tnrData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   initPgObjectShow = () => {
     let pgObjectShow = this.state.pgObject;
     this.setState({ pgObjectShow });
@@ -159,11 +212,11 @@ export class AppProvider extends React.Component {
 
   componentDidMount = () => {
     this.dataLoadController();
+    // this.fetchTimeSeriesData("heyheyhey");
+    // this.fetchTwNationalRanksAPI().then(() => this.setmtObject());
   };
   ///////////////////////////
-  componentWillUnmount() {
-    this.storeCurrentPage();
-  }
+
   storeCurrentPage = (currentPage) => {
     localStorage.setItem("nowHitCurrentPage", JSON.stringify(currentPage));
   };
@@ -198,6 +251,31 @@ export class AppProvider extends React.Component {
     } else this.fetchTwRegionalRanksAPI();
     console.log("right start call back");
   };
+
+  // setmtObject = () => {
+  //   console.log("setmtObject");
+  //   let temp = this.state.ttrData;
+  //   console.log(temp);
+  //   let ttrData = this.state.ttrData;
+  //   console.log("tnrData");
+  //   let topKeyword = tnrData.data.keyword;
+  //   let mtObject = Array.from(Array(3).keys());
+
+  //   mtObject.forEach((element, key) => {
+  //     let keyword = topKeyword[key];
+  //     console.log(keyword);
+  //     console.log(keyword);
+  //     this.fetchTimeSeriesData(keyword).then((res) => {
+  //       console.log(res);
+  //       let timeseries = res.data[keyword].smoothCount;
+
+  //       mtObject[key] = Object.fromEntries(
+  //         new Map(["name", keyword], ["type", "area"], ["data", timeseries])
+  //       );
+  //     });
+  //   });
+  //   console.log(mtObject);
+  // };
 
   setpgObject = () => {
     console.log("start setpgObject !");

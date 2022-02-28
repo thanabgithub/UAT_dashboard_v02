@@ -17,9 +17,9 @@ gcs_CX = Config.GCS_CX
 
 expire_after_param = 6 * 60 * 60
 # 6 hours
-requests_cache.install_cache(
-    "data/twitter_service_cache", backend="sqlite", expire_after=expire_after_param
-)
+# requests_cache.install_cache(
+#     "data/twitter_service_cache", backend="sqlite", expire_after=expire_after_param
+# )
 
 # %%
 def get_trends(url):
@@ -38,9 +38,7 @@ def get_trends(url):
         """
         Method required by bearer token authentication.
         """
-        bearer_token = os.environ.get("BEARER_TOKEN")
-        print("bearer_token")
-        print(bearer_token)
+
         r.headers["Authorization"] = f"Bearer {bearer_token}"
         return r
 
@@ -121,6 +119,10 @@ def prepare_url(regional_df, national_df):
     gcs_developer_key = os.environ.get("GCS_DEVELOPER_KEY")
     gcs_CX = os.environ.get("GCS_CX")
 
+    
+    national_df['keyword'] = national_df['keyword'].map(lambda x: x.lstrip('#'))
+    regional_df['keyword'] = regional_df['keyword'].map(lambda x: x.lstrip('#'))
+    
     keyword_national_set = set(national_df.keyword)
     keyword_regional_set = set(regional_df.keyword)
 
@@ -157,6 +159,7 @@ def prepare_url(regional_df, national_df):
         regional_df['imgURL'][regional_df.keyword==keyword] = keyword_to_image[keyword]
 
 
+    
     national_df.reset_index(inplace = True)
     regional_df.reset_index(inplace = True)  
     
