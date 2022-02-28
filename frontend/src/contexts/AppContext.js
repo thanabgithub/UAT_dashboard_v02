@@ -13,6 +13,8 @@ const TWITTER_REGIONAL_RANKS_URL =
 const MAX_AGE_DATA_GRID = 5 * 60;
 // 5 mins
 
+const PAGES_NAME = ["Monitor", "Research", "Playground"];
+
 export class AppProvider extends React.Component {
   constructor(props) {
     super(props);
@@ -162,11 +164,8 @@ export class AppProvider extends React.Component {
   componentWillUnmount() {
     this.storeCurrentPage();
   }
-  storeCurrentPage = () => {
-    localStorage.setItem(
-      "nowHitCurrentPage",
-      JSON.stringify(this.state.currentPage)
-    );
+  storeCurrentPage = (currentPage) => {
+    localStorage.setItem("nowHitCurrentPage", JSON.stringify(currentPage));
   };
   assembleArrayFilter = (index, keyword, rank, region, imgURL) =>
     Object.fromEntries(
@@ -248,38 +247,84 @@ export class AppProvider extends React.Component {
 
   dataLoadController = async () => {
     console.log("start dataLoadController");
-    let extractData = JSON.parse(localStorage.getItem("nowHitTrrDataCache"));
-    if (!extractData) {
-      let trrData = extractData;
-      await this.fetchTwRegionalRanksAPI().then(() => {
-        trrData = this.setpgObject();
-        localStorage.setItem("nowHitTrrData", JSON.stringify(trrData));
-      });
-    } else {
-      let timestamp = extractData.meta.requestTimestampMillisec;
-      let now = Date.now();
-      let fromLastRequest = now - timestamp;
 
-      if (fromLastRequest < MAX_AGE_DATA_GRID) {
-        this.fetchTwRegionalRanksAPI();
+    console.log("savedSettings");
+
+    try {
+      let extractData = JSON.parse(localStorage.getItem("nowHitTrrDataCache"));
+
+      if (!extractData) {
+        let trrData = extractData;
+        await this.fetchTwRegionalRanksAPI().then(() => {
+          trrData = this.setpgObject();
+          localStorage.setItem("nowHitTrrData", JSON.stringify(trrData));
+        });
+      } else {
+        let timestamp = extractData.meta.requestTimestampMillisec;
+        let now = Date.now();
+        let fromLastRequest = now - timestamp;
+
+        if (fromLastRequest < MAX_AGE_DATA_GRID) {
+          this.fetchTwRegionalRanksAPI();
+        }
       }
+
+      this.setpgObject();
+      this.initPgObjectShow();
+      this.initUnshownRegionsStatus();
+
+      console.log("end dataLoadController");
+    } catch (err) {
+      console.log("Error: ", err.message);
+      return { currentPage: "Playground" };
     }
-
-    this.setpgObject();
-    this.initPgObjectShow();
-    this.initUnshownRegionsStatus();
-
-    console.log("end dataLoadController");
   };
 
-  savedSettings = async () => {
+  savedSettings = () => {
     console.log("savedSettings");
+    try {
+      let extractData = JSON.parse(localStorage.getItem("nowHitCurrentPage"));
+      console.log("nowHitCurrentPage");
+      console.log(extractData);
+      if (PAGES_NAME.includes(extractData)) {
+        let currentPage = extractData;
+        console.log(currentPage);
+        return { currentPage: currentPage };
+      }
+    } catch (err) {
+      console.log("Error: ", err.message);
+      return { currentPage: "Playground" };
+    }
+
+    // console.log("nowHitCurrentPage");
+    // console.log(extractData);
+    // if (PAGES_NAME.includes(extractData)) {
+    //   let currentPage = extractData;
+    //   console.log(currentPage);
+    //   return { currentPage: currentPage };
+    // } else return { currentPage: "Playground" };
   };
 
   setCurrentPage = (currentPage) => {
     this.setState({ currentPage });
+    this.storeCurrentPage(currentPage);
   };
-
+  loadPreviousPage = () => {
+    console.log("savedSettings");
+    try {
+      let extractData = JSON.parse(localStorage.getItem("nowHitCurrentPage"));
+      console.log("nowHitCurrentPage");
+      console.log(extractData);
+      if (PAGES_NAME.includes(extractData)) {
+        let currentPage = extractData;
+        console.log(currentPage);
+        return { currentPage: currentPage };
+      }
+    } catch (err) {
+      console.log("Error: ", err.message);
+      return { currentPage: "Playground" };
+    }
+  };
   render() {
     return (
       <AppContext.Provider value={this.state}>

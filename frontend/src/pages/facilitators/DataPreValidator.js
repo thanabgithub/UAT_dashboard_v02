@@ -15,7 +15,6 @@ const DataPreValidator = (props) => {
 
           return (
             <div>
-              {" "}
               <h1>. . . 読み込み中 . . .</h1>
             </div>
           );

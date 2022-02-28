@@ -1,10 +1,9 @@
 import React from "react";
-import RegionSelectButtons from "./filter/RegionSelectButtons";
+
 import styled from "styled-components";
 import PageValidator from "../facilitators/PageValidator";
 import DataPreValidator from "../facilitators/DataPreValidator";
 import { useState } from "react";
-import KeywordGrid from "./KeywordGrid";
 
 const RegionButtonPanel = styled.div``;
 
@@ -19,7 +18,7 @@ const PageTitle = styled.h2`
   color: #50a3a4;
 `;
 
-class Playground extends React.Component {
+class Monitor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,16 +52,9 @@ class Playground extends React.Component {
       <PageValidator name={this.props.name}>
         <PageTitle>{this.props.name}</PageTitle>
         <PageDescription>{this.state.word}</PageDescription>{" "}
-        <DataPreValidator>
-          {" "}
-          <RegionButtonPanel>
-            <RegionSelectButtons />
-          </RegionButtonPanel>
-          <KeywordGrid />{" "}
-        </DataPreValidator>
       </PageValidator>
     );
   }
 }
 
-export default Playground;
+export default Monitor;

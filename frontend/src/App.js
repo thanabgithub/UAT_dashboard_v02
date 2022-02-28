@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 import "./styles/WebFontLoader";
 import Playground from "./pages/playground/index";
-
+import Research from "./pages/research/index";
+import Monitor from "./pages/monitor/index";
 import AppLayout from "./components/containers/AppLayout";
 import AppBar from "./components/elements/appBar/AppBar";
 import { AppProvider } from "./contexts/AppContext";
@@ -15,10 +16,10 @@ class App extends Component {
         <AppProvider>
           {/* the functionality of context provider is to restrict scope of context */}
           <AppBar />
-          <DataPreValidator>
-            {" "}
-            <Playground name="NowHit" />
-          </DataPreValidator>
+
+          <Playground name="Playground" />
+          <Research name="Research" />
+          <Monitor name="Monitor" />
         </AppProvider>
       </AppLayout>
     );
