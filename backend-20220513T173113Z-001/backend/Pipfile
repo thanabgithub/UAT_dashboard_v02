@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ipykernel = "*"
+flask = "*"
+python-dotenv = "*"
+requests = "*"
+pandas = "*"
+matplotlib = "*"
+install = "*"
+flask-caching = "*"
+flask-cors = "*"
+requests-cache = "*"
+jupyter = "*"
+numpy = "*"
+scipy = "*"
+uuid = "*"
+openpyxl = "*"
+apscheduler = "*"
+varname = "*"
+google-images-search = "*"
+windows-curses = "*"
+werkzeug = "*"
+six = "*"
+urllib3 = "*"
+url-normalize = "*"
+ta-lib = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
